@@ -20,4 +20,9 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="NumberPickerText">
+        <item name="android:textSize">18sp</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
+    </style>
+
 </resources>
