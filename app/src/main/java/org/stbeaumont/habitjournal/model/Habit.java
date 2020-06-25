@@ -1,25 +1,25 @@
-package org.stbeaumont.habitjournal;
+package org.stbeaumont.habitjournal.model;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
 public class Habit {
     private String name;
+    private String frequency; //daily, weekly, or monthly
+    private HashMap<String, Boolean> daysOfWeek;
     private HashMap<Date, Boolean> dateLog = new HashMap<>();
 
-    public Habit(String name) {
-        this.name = name;
-    }
 
     public String getName() {
         return name;
     }
 
-    public Boolean getCompleteOnDate(Date date) {
+    public Boolean checkLogOnDate(Date date) {
         return dateLog.get(date);
     }
 
-    public void putCompleteOnDate(Date date, Boolean isCompleted) {
+    public void logDate(Date date, Boolean isCompleted) {
         dateLog.put(date, isCompleted);
     }
 

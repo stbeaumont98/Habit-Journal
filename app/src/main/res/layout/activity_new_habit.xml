@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".controller.HomeActivity" >
-
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -25,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/app_name"
+                android:text="New Habit"
                 android:textColor="@color/colorPrimary"
                 android:theme="@style/ToolbarTheme" />
 
@@ -33,44 +31,20 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
     <include
-        android:id="@+id/main_content"
-        layout="@layout/content_home"
+        layout="@layout/new_habit_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize" />
+        android:layout_marginTop="?attr/actionBarSize"  />
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bar"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_gravity="bottom"
-        android:visibility="visible"
-        app:backgroundTint="@android:color/white"
-        app:fabAlignmentMode="center"
-        app:fabAnimationMode="scale"
-        app:fabCradleMargin="5dp"
-        app:fabCradleRoundedCornerRadius="10dp"
-        app:fabCradleVerticalOffset="5dp"
-        app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:backgroundTint="@color/colorPrimary"
-        app:layout_anchor="@id/bar"
-        app:srcCompat="@drawable/ic_round_add"
-        app:tint="@android:color/white" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Add"
+        app:icon="@drawable/ic_round_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

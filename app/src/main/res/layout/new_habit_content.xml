@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextHabit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="What habit would you like to work on?"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextHabit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/textViewRepeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="How often would you like to repeat this habit?"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/outlinedTextHabit" />
+
+            <Button
+                android:id="@+id/buttonDaily"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Daily"
+                app:cornerRadius="@dimen/corner_radius"
+                app:layout_constraintEnd_toStartOf="@+id/buttonWeekly"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewRepeat"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="2dp" />
+
+            <Button
+                android:id="@+id/buttonWeekly"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:backgroundTint="@android:color/white"
+                android:text="Weekly"
+                android:textColor="@color/colorPrimary"
+                app:cornerRadius="@dimen/corner_radius"
+                app:layout_constraintBaseline_toBaselineOf="@+id/buttonDaily"
+                app:layout_constraintEnd_toStartOf="@+id/buttonMonthly"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/buttonDaily"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="2dp" />
+
+            <Button
+                android:id="@+id/buttonMonthly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:backgroundTint="@android:color/white"
+                android:text="Monthly"
+                android:textColor="@color/colorPrimary"
+                app:cornerRadius="@dimen/corner_radius"
+                app:layout_constraintBaseline_toBaselineOf="@+id/buttonWeekly"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/buttonWeekly"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="2dp" />
+
+            <TextView
+                android:id="@+id/textViewWhen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="On which day(s)?"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonDaily" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintWhen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewWhen">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintDaily"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <Button
+                        android:id="@+id/buttonSunday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:backgroundTint="@android:color/white"
+                        android:padding="10dp"
+                        android:text="S"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonMonday"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <Button
+                        android:id="@+id/buttonMonday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@android:color/white"
+                        android:padding="10dp"
+                        android:text="M"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonSunday"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonTuesday"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/buttonSunday"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <Button
+                        android:id="@+id/buttonTuesday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@android:color/white"
+                        android:padding="10dp"
+                        android:text="T"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonMonday"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonWednesday"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/buttonMonday"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <Button
+                        android:id="@+id/buttonWednesday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@android:color/white"
+                        android:padding="10dp"
+                        android:text="W"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonTuesday"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonThursday"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/buttonTuesday"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <Button
+                        android:id="@+id/buttonThursday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@android:color/white"
+                        android:padding="10dp"
+                        android:text="T"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonWednesday"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonFriday"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/buttonWednesday"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <Button
+                        android:id="@+id/buttonFriday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@android:color/white"
+                        android:padding="10dp"
+                        android:text="F"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonThursday"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonSaturday"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/buttonThursday"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <Button
+                        android:id="@+id/buttonSaturday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:backgroundTint="@android:color/white"
+                        android:padding="10dp"
+                        android:text="S"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonFriday"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/buttonFriday"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <Button
+                        android:id="@+id/buttonEveryday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:padding="10dp"
+                        android:text="Everyday"
+                        app:cornerRadius="@dimen/corner_radius"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/buttonWednesday" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintWeekly"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/textViewEvery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Every"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/numberPickerWeeks"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <NumberPicker
+                        android:id="@+id/numberPickerWeeks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textViewWeeks"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textViewEvery"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textViewWeeks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="weeks"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/numberPickerWeeks"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintMonthly"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <CalendarView
+                        android:id="@+id/calendarView2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textViewGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Do you have a goal?"
+                app:layout_constraintEnd_toStartOf="@+id/switchGoal"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintWhen" />
+
+            <Switch
+                android:id="@+id/switchGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textViewGoal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textViewGoal" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintGoal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewGoal">
+
+                <NumberPicker
+                    android:id="@+id/numberPicker2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textViewWeeks2"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewWeeks2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="times"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/numberPicker2"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextTime"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="What time would you like a reminder?"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintGoal">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
