@@ -1,6 +1,8 @@
 package org.stbeaumont.habitjournal.controller;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
@@ -40,10 +42,8 @@ public class NewHabitActivity extends AppCompatActivity {
     private static final int SAT = 6;
 
     private TextInputEditText editTextHabit, editTextTime;
-    private Button buttonDaily, buttonWeekly, buttonMonthly;
     private Button buttonEveryday;
     private Button buttonFirstDay, buttonLastDay;
-    private ConstraintLayout constraintDaily, constraintWeekly, constraintMonthly;
     private ConstraintLayout constraintGoal;
 
     private ArrayList<Button> dayButtons = new ArrayList<>();
@@ -56,24 +56,24 @@ public class NewHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_habit);
 
+        Toolbar tb = findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null)
+            actionBar.setDisplayShowTitleEnabled(false);
+
         for (int i = 0; i < 7; i++) { //make it true for every day by default
             daysOfWeek.add(true);
         }
 
-        editTextHabit = findViewById(R.id.editTextHabit);
-        editTextTime = findViewById(R.id.editTextTime);
-
-        buttonDaily = findViewById(R.id.buttonDaily);
-        buttonWeekly = findViewById(R.id.buttonWeekly);
-        buttonMonthly = findViewById(R.id.buttonMonthly);
-
-        frequencyButtons.add(buttonDaily);
-        frequencyButtons.add(buttonWeekly);
-        frequencyButtons.add(buttonMonthly);
-
-        buttonFirstDay = findViewById(R.id.buttonFirst);
-        buttonLastDay = findViewById(R.id.buttonLast);
-
+        Button buttonDaily = findViewById(R.id.buttonDaily);
+        Button buttonWeekly = findViewById(R.id.buttonWeekly);
+        Button buttonMonthly = findViewById(R.id.buttonMonthly);
         Button buttonSun = findViewById(R.id.buttonSunday);
         Button buttonMon = findViewById(R.id.buttonMonday);
         Button buttonTue = findViewById(R.id.buttonTuesday);
@@ -81,6 +81,12 @@ public class NewHabitActivity extends AppCompatActivity {
         Button buttonThu = findViewById(R.id.buttonThursday);
         Button buttonFri = findViewById(R.id.buttonFriday);
         Button buttonSat = findViewById(R.id.buttonSaturday);
+        buttonFirstDay = findViewById(R.id.buttonFirst);
+        buttonLastDay = findViewById(R.id.buttonLast);
+
+        frequencyButtons.add(buttonDaily);
+        frequencyButtons.add(buttonWeekly);
+        frequencyButtons.add(buttonMonthly);
 
         dayButtons.add(buttonSun);
         dayButtons.add(buttonMon);
@@ -92,9 +98,12 @@ public class NewHabitActivity extends AppCompatActivity {
 
         buttonEveryday = findViewById(R.id.buttonEveryday);
 
-        constraintDaily = findViewById(R.id.constraintDaily);
-        constraintWeekly = findViewById(R.id.constraintWeekly);
-        constraintMonthly = findViewById(R.id.constraintMonthly);
+        editTextHabit = findViewById(R.id.editTextHabit);
+        editTextTime = findViewById(R.id.editTextTime);
+
+        ConstraintLayout constraintDaily = findViewById(R.id.constraintDaily);
+        ConstraintLayout constraintWeekly = findViewById(R.id.constraintWeekly);
+        ConstraintLayout constraintMonthly = findViewById(R.id.constraintMonthly);
         constraintGoal = findViewById(R.id.constraintGoal);
 
         frequencyConstraints.add(constraintDaily);

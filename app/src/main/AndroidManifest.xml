@@ -9,7 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.NewHabitActivity"></activity>
+        <activity
+            android:name=".controller.NewHabitActivity"
+            android:parentActivityName=".controller.HomeActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controller.HomeActivity" />
+        </activity>
         <activity android:name=".controller.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
