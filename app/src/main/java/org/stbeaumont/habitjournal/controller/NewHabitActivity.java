@@ -18,9 +18,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.stbeaumont.habitjournal.R;
 
@@ -41,13 +43,15 @@ public class NewHabitActivity extends AppCompatActivity {
     private static final int FRI = 5;
     private static final int SAT = 6;
 
-    private TextInputEditText editTextHabit, editTextTime;
+    private TextInputEditText editTextHabit;
+    private TextView textReminderTime;
     private Button buttonEveryday;
-    private Button buttonFirstDay, buttonLastDay;
     private ConstraintLayout constraintGoal;
+    private NumberPicker pickerDayOfMonth;
 
-    private ArrayList<Button> dayButtons = new ArrayList<>();
     private ArrayList<Button> frequencyButtons = new ArrayList<>();
+    private ArrayList<Button> dayButtons = new ArrayList<>();
+    private ArrayList<Button> dayOfMonthButtons = new ArrayList<>();
     private ArrayList<ConstraintLayout> frequencyConstraints = new ArrayList<>();
     private ArrayList<Boolean> daysOfWeek = new ArrayList<>();
 
@@ -81,8 +85,9 @@ public class NewHabitActivity extends AppCompatActivity {
         Button buttonThu = findViewById(R.id.buttonThursday);
         Button buttonFri = findViewById(R.id.buttonFriday);
         Button buttonSat = findViewById(R.id.buttonSaturday);
-        buttonFirstDay = findViewById(R.id.buttonFirst);
-        buttonLastDay = findViewById(R.id.buttonLast);
+        Button buttonFirstDay = findViewById(R.id.buttonFirst);
+        Button buttonLastDay = findViewById(R.id.buttonLast);
+        Button buttonCustomDay = findViewById(R.id.buttonCustom);
 
         frequencyButtons.add(buttonDaily);
         frequencyButtons.add(buttonWeekly);
@@ -96,10 +101,15 @@ public class NewHabitActivity extends AppCompatActivity {
         dayButtons.add(buttonFri);
         dayButtons.add(buttonSat);
 
+        dayOfMonthButtons.add(buttonFirstDay);
+        dayOfMonthButtons.add(buttonLastDay);
+        dayOfMonthButtons.add(buttonCustomDay);
+
         buttonEveryday = findViewById(R.id.buttonEveryday);
 
         editTextHabit = findViewById(R.id.editTextHabit);
-        editTextTime = findViewById(R.id.editTextTime);
+
+        textReminderTime = findViewById(R.id.textReminderTime);
 
         ConstraintLayout constraintDaily = findViewById(R.id.constraintDaily);
         ConstraintLayout constraintWeekly = findViewById(R.id.constraintWeekly);
@@ -111,7 +121,8 @@ public class NewHabitActivity extends AppCompatActivity {
         frequencyConstraints.add(constraintMonthly);
 
         NumberPicker pickerWeeks = findViewById(R.id.numberPickerWeeks);
-        NumberPicker pickerDayOfMonth = findViewById(R.id.numberPickerDayOfMonth);
+        pickerDayOfMonth = findViewById(R.id.numberPickerDayOfMonth);
+        pickerDayOfMonth.setEnabled(false);
         NumberPicker pickerGoal = findViewById(R.id.numberPickerGoal);
 
         Switch switchGoal = findViewById(R.id.switchGoal);
@@ -169,6 +180,16 @@ public class NewHabitActivity extends AppCompatActivity {
             });
         }
 
+        for (int i = 0; i < 3; i++) {
+            final int finalI = i;
+            dayOfMonthButtons.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectDayOfMonth(finalI);
+                }
+            });
+        }
+
         buttonEveryday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,21 +200,7 @@ public class NewHabitActivity extends AppCompatActivity {
             }
         });
 
-        buttonFirstDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectFirstDay();
-            }
-        });
-
-        buttonLastDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectLastDay();
-            }
-        });
-
-        editTextTime.setOnClickListener(new View.OnClickListener() {
+        textReminderTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar currentTime = Calendar.getInstance();
@@ -203,8 +210,8 @@ public class NewHabitActivity extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(NewHabitActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        String time = selectedHour + ":" + selectedMinute;
-                        editTextTime.setText(time);
+                        String time = String.format(Locale.getDefault(),"%02d:%02d", (selectedHour > 12 ? selectedHour - 12 : selectedHour), selectedMinute) + (selectedHour > 12 ? " PM" : " AM");
+                        textReminderTime.setText(time);
                     }
                 }, hour, minute, false);
                 mTimePicker.setTitle("Select Time");
@@ -230,18 +237,21 @@ public class NewHabitActivity extends AppCompatActivity {
         }
     }
 
-    public void selectFirstDay() {
-        buttonFirstDay.setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-        buttonFirstDay.setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-        buttonLastDay.setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-        buttonLastDay.setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-    }
-
-    public void selectLastDay() {
-        buttonLastDay.setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-        buttonLastDay.setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-        buttonFirstDay.setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-        buttonFirstDay.setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+    public void selectDayOfMonth(int index) {
+        for (int i = 0; i < 3; i++) {
+            if (i == index) {
+                dayOfMonthButtons.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+                dayOfMonthButtons.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
+            } else {
+                dayOfMonthButtons.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
+                dayOfMonthButtons.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+            }
+            if (index == 2) {
+                pickerDayOfMonth.setEnabled(true);
+            } else {
+                pickerDayOfMonth.setEnabled(false);
+            }
+        }
     }
 
     public boolean isEveryDay() {

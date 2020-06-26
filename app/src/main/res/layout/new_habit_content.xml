@@ -16,7 +16,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextHabit"
@@ -44,14 +44,15 @@
 
 
             <TextView
-                android:id="@+id/textViewRepeat"
+                android:id="@+id/textRepeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:text="How often would you like to repeat this habit?"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/outlinedTextHabit" />
+
 
             <Button
                 android:id="@+id/buttonDaily"
@@ -64,7 +65,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/buttonWeekly"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewRepeat"
+                app:layout_constraintTop_toBottomOf="@+id/textRepeat"
                 app:strokeColor="@color/colorPrimary"
                 app:strokeWidth="2dp" />
 
@@ -101,12 +102,12 @@
                 app:strokeWidth="2dp" />
 
             <TextView
-                android:id="@+id/textViewWhen"
+                android:id="@+id/textWhen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="On which day(s)?"
+                android:text="When?"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonDaily" />
 
@@ -118,13 +119,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewWhen">
+                app:layout_constraintTop_toBottomOf="@+id/textWhen">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintDaily"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -321,7 +322,7 @@
                     android:id="@+id/constraintMonthly"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -358,18 +359,22 @@
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
-                    <TextView
-                        android:id="@+id/textViewCustom"
+                    <Button
+                        android:id="@+id/buttonCustom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Custom:"
-                        android:textSize="18sp"
+                        android:backgroundTint="@color/white"
+                        android:text="Custom"
+                        android:textColor="@color/colorPrimary"
+                        app:cornerRadius="@dimen/corner_radius"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/numberPickerDayOfMonth"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/buttonFirst" />
+                        app:layout_constraintTop_toBottomOf="@+id/buttonFirst"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
 
                     <NumberPicker
                         android:id="@+id/numberPickerDayOfMonth"
@@ -380,7 +385,7 @@
                         android:theme="@style/NumberPickerText"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textViewCustom"
+                        app:layout_constraintStart_toEndOf="@+id/buttonCustom"
                         app:layout_constraintTop_toBottomOf="@+id/buttonFirst" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -388,11 +393,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textViewGoal"
+                android:id="@+id/textGoal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:text="Do you have a goal?"
                 app:layout_constraintEnd_toStartOf="@+id/switchGoal"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -405,10 +410,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewGoal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textGoal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textViewGoal" />
+                app:layout_constraintStart_toEndOf="@+id/textGoal" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintGoal"
@@ -417,7 +422,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewGoal">
+                app:layout_constraintTop_toBottomOf="@+id/textGoal">
 
                 <NumberPicker
                     android:id="@+id/numberPickerGoal"
@@ -445,32 +450,27 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextTime"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textWhatTime"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginBottom="80dp"
-                android:hint="What time would you like a reminder?"
-                app:boxCornerRadiusBottomEnd="@dimen/corner_radius"
-                app:boxCornerRadiusBottomStart="@dimen/corner_radius"
-                app:boxCornerRadiusTopEnd="@dimen/corner_radius"
-                app:boxCornerRadiusTopStart="@dimen/corner_radius"
+                android:text="What time would you like a reminder?"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintGoal">
+                app:layout_constraintTop_toBottomOf="@+id/constraintGoal" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="time" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/textReminderTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="12:00 PM"
+                android:textSize="18sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textWhatTime"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

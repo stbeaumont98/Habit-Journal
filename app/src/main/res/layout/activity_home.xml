@@ -53,13 +53,7 @@
         app:fabCradleRoundedCornerRadius="10dp"
         app:fabCradleVerticalOffset="5dp"
         app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
+        app:layout_scrollFlags="scroll|enterAlways"/>
 
 
 
