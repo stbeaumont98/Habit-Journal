@@ -16,7 +16,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTextHabit"
@@ -125,7 +125,7 @@
                     android:id="@+id/constraintDaily"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -294,7 +294,7 @@
 
                     <NumberPicker
                         android:id="@+id/numberPickerWeeks"
-                        android:layout_width="50dp"
+                        android:layout_width="35dp"
                         android:layout_height="75dp"
                         android:layout_marginStart="16dp"
                         android:theme="@style/NumberPickerText"
@@ -322,7 +322,7 @@
                     android:id="@+id/constraintMonthly"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -378,7 +378,7 @@
 
                     <NumberPicker
                         android:id="@+id/numberPickerDayOfMonth"
-                        android:layout_width="50dp"
+                        android:layout_width="35dp"
                         android:layout_height="100dp"
                         android:layout_marginStart="16dp"
                         android:hapticFeedbackEnabled="true"
@@ -399,17 +399,16 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:text="Do you have a goal?"
-                app:layout_constraintEnd_toStartOf="@+id/switchGoal"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxGoal"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintWhen" />
 
-            <Switch
-                android:id="@+id/switchGoal"
+            <CheckBox
+                android:id="@+id/checkBoxGoal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textGoal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -426,7 +425,7 @@
 
                 <NumberPicker
                     android:id="@+id/numberPickerGoal"
-                    android:layout_width="50dp"
+                    android:layout_width="35dp"
                     android:layout_height="100dp"
                     android:theme="@style/NumberPickerText"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -456,9 +455,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginBottom="80dp"
                 android:text="What time would you like a reminder?"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintGoal" />
 
@@ -466,11 +463,14 @@
                 android:id="@+id/textReminderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="96dp"
                 android:text="12:00 PM"
                 android:textSize="18sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textWhatTime"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textWhatTime" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

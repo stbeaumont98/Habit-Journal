@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import org.stbeaumont.habitjournal.model.Habit;
 import org.stbeaumont.habitjournal.R;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
-    ArrayList<Habit> habits;
+    ArrayList<Habit> habits = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,19 @@ public class HomeActivity extends AppCompatActivity {
 
     public void openNewHabitActivity() {
         Intent i = new Intent(this, NewHabitActivity.class);
-        startActivity(i);
+        startActivityForResult(i, 1);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                Habit h = data.getParcelableExtra("habit");
+                Gson gson = new Gson();
+                System.out.println(gson.toJson(h));
+                habits.add(h);
+
+            }
+        }
     }
 }

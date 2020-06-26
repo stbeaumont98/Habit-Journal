@@ -13,6 +13,8 @@
         <item name="android:windowLightNavigationBar"
             tools:targetApi="27">true</item>
         <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:timePickerStyle">@style/Theme.MyTheme.TimePicker</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -24,5 +26,24 @@
         <item name="android:textSize">18sp</item>
         <item name="colorControlNormal">@android:color/transparent</item>
     </style>
+
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/corner_radius</item>
+    </style>
+
+    <style name="Theme.MyTheme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">@android:color/white</item>
+        <item name="android:headerTimeTextAppearance">@style/DialogHeaderTextTheme</item>
+        <item name="android:numbersTextColor">@android:color/black</item>
+        <item name="android:numbersInnerTextColor">@android:color/black</item>
+        <item name="android:amPmTextColor">@android:color/black</item>
+    </style>
+
+    <style name="DialogHeaderTextTheme" parent="">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 
 </resources>

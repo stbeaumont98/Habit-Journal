@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Habit Journal</string>
+    <string name="timepicker_positive">Ok</string>
+    <string name="timepicker_negative">Cancel</string>
 </resources>
