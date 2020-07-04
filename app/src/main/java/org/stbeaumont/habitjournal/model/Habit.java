@@ -3,6 +3,8 @@ package org.stbeaumont.habitjournal.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +31,7 @@ public class Habit implements Parcelable {
     private boolean hasGoal;
     private int goal;
     private long reminderTime;
-    private HashMap<Date, Boolean> dateLog = new HashMap<>();
+    private HashMap<LocalDate, Boolean> dateLog = new HashMap<>();
 
     public Habit(String name, int frequency, ArrayList<Boolean> daysOfWeek, int weeklyInterval, int dayOfMonth, boolean hasGoal, int goal, long reminderTime) {
         this.name = name;
@@ -97,11 +99,11 @@ public class Habit implements Parcelable {
         return reminderTime;
     }
 
-    public Boolean checkLogOnDate(Date date) {
+    public Boolean checkLogOnDate(LocalDate date) {
         return dateLog.get(date);
     }
 
-    public void logDate(Date date, Boolean isCompleted) {
+    public void logDate(LocalDate date, Boolean isCompleted) {
         dateLog.put(date, isCompleted);
     }
 
