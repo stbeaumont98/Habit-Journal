@@ -16,9 +16,11 @@ import java.util.ArrayList;
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder> {
 
     private ArrayList<Habit> habits;
+    private HabitClickListener habitClickListener;
 
-    public HabitAdapter(ArrayList<Habit> habits) {
+    public HabitAdapter(ArrayList<Habit> habits, HabitClickListener habitClickListener) {
         this.habits = habits;
+        this.habitClickListener = habitClickListener;
     }
 
     @NonNull
@@ -28,7 +30,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View v = inflater.inflate(R.layout.habit_list_item, parent, false);
-        return new HabitViewHolder(v);
+        return new HabitViewHolder(v, habitClickListener);
     }
 
     @Override
@@ -36,8 +38,17 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         Habit habit = habits.get(position);
 
         TextView textHabitName = holder.habitName;
+        TextView textProgress = holder.habitProgress;
 
         textHabitName.setText(habit.getName());
+
+        if (habit.hasGoal()) {
+            textProgress.setVisibility(View.VISIBLE);
+            String progress = habit.getNumberOfSuccesses() + "/" + habit.getGoal();
+            textProgress.setText(progress);
+        } else {
+            textProgress.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -45,13 +56,29 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         return habits.size();
     }
 
-    public class HabitViewHolder extends RecyclerView.ViewHolder {
+    public class HabitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView habitName;
+        private TextView habitProgress;
+        private HabitClickListener habitClickListener;
 
-        public HabitViewHolder(@NonNull View v) {
+        public HabitViewHolder(@NonNull View v, HabitClickListener habitClickListener) {
             super(v);
             this.habitName = v.findViewById(R.id.textHabitName);
+            this.habitProgress = v.findViewById(R.id.textGoalProgress);
+
+            this.habitClickListener = habitClickListener;
+
+            v.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            habitClickListener.onHabitClick(getAdapterPosition());
+        }
+    }
+
+    public interface HabitClickListener {
+        void onHabitClick(int position);
     }
 }

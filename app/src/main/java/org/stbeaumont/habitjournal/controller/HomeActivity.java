@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,7 +23,6 @@ import com.kizitonwose.calendarview.ui.DayBinder;
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder;
 import com.kizitonwose.calendarview.ui.ViewContainer;
 
-import org.stbeaumont.habitjournal.model.Event;
 import org.stbeaumont.habitjournal.model.Habit;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.HabitAdapter;
@@ -32,26 +30,24 @@ import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.YearMonth;
 import org.threeten.bp.temporal.WeekFields;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements HabitAdapter.HabitClickListener {
 
     private LocalDate selectedDate = null;
     private ArrayList<Habit> habits = new ArrayList<>();
+    private HabitAdapter habitAdapter;
     private CalendarView calendarView;
-    private HashMap<LocalDate, ArrayList<Event>> events = new HashMap<>();
+    private HashMap<LocalDate, ArrayList<Habit>> events = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         AndroidThreeTen.init(this);
-
-        final LocalDate today = LocalDate.now();
 
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
@@ -72,6 +68,23 @@ public class HomeActivity extends AppCompatActivity {
 
         calendarView = findViewById(R.id.calendarView);
 
+        setupCalendar(calendarView);
+
+        RecyclerView habitRecyclerView = findViewById(R.id.rv);
+
+        habitAdapter = new HabitAdapter(habits, this);
+
+        habitRecyclerView.setAdapter(habitAdapter);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+
+        habitRecyclerView.setLayoutManager(llm);
+
+    }
+
+    public void setupCalendar(CalendarView calendarView) {
+        final LocalDate today = LocalDate.now();
+
         YearMonth currentMonth = YearMonth.now();
         YearMonth firstMonth = currentMonth.minusMonths(10);
         YearMonth lastMonth = currentMonth.plusMonths(10);
@@ -79,62 +92,6 @@ public class HomeActivity extends AppCompatActivity {
 
         calendarView.setup(firstMonth, lastMonth, firstDayOfWeek);
         calendarView.scrollToMonth(currentMonth);
-
-        class DayViewContainer extends ViewContainer {
-            private CalendarDay day;
-            private TextView textDay;
-            public DayViewContainer(View view) {
-                super(view);
-                textDay = view.findViewById(R.id.calendarDayText);
-
-                textDay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (day.getOwner() == DayOwner.THIS_MONTH) {
-                            if (selectedDate == day.getDate()) {
-                                selectedDate = null;
-                                calendarView.notifyDayChanged(day);
-                            } else {
-                                LocalDate oldDate = selectedDate;
-                                selectedDate = day.getDate();
-                                calendarView.notifyDateChanged(day.getDate());
-                                if (oldDate != null)
-                                {
-                                    calendarView.notifyDateChanged(oldDate);
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            public void setDay(CalendarDay day) {
-                this.day = day;
-            }
-
-            public TextView getTextDay() {
-                return textDay;
-            }
-        }
-
-        class MonthHeaderContainer extends ViewContainer {
-            private TextView textMonth;
-            private TextView textYear;
-
-            public MonthHeaderContainer(View view) {
-                super(view);
-                textMonth = view.findViewById(R.id.textMonth);
-                textYear = view.findViewById(R.id.textYear);
-            }
-
-            public TextView getTextMonth() {
-                return textMonth;
-            }
-
-            public TextView getTextYear() {
-                return textYear;
-            }
-        }
 
         calendarView.setDayBinder(new DayBinder<DayViewContainer>() {
             @Override
@@ -146,20 +103,26 @@ public class HomeActivity extends AppCompatActivity {
             public void bind(DayViewContainer container, CalendarDay day) {
                 container.setDay(day);
                 TextView textDay = container.getTextDay();
-                textDay.setText(Integer.toString(day.getDate().getDayOfMonth()));
+                View dotView = container.getEventView();
+
+                textDay.setText(String.format(Locale.getDefault(), "%d", day.getDate().getDayOfMonth()));
+
                 if (day.getOwner() == DayOwner.THIS_MONTH) {
-                    if (day.getDate() == selectedDate) {
+                    if (day.getDate().equals(today)) {
                         textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, android.R.color.white));
                         textDay.setBackgroundResource(R.drawable.bg_selected_day);
-                    } else if (day.getDate().equals(today)) {
-                        textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, R.color.colorAccent));
-                        textDay.setBackgroundResource(0);
+                        dotView.setVisibility(View.INVISIBLE);
                     } else {
                         textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, android.R.color.black));
                         textDay.setBackgroundResource(0);
+                        dotView.setVisibility(View.INVISIBLE);
+                        for (Habit h : habits) {
+                            dotView.setVisibility(h.checkLogOnDate(day.getDate()) ? View.VISIBLE : View.INVISIBLE);
+                        }
                     }
                 } else {
                     textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, android.R.color.darker_gray));
+                    dotView.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -178,17 +141,6 @@ public class HomeActivity extends AppCompatActivity {
                 textYear.setText(Integer.toString(month.getYear()));
             }
         });
-
-        RecyclerView habitRecyclerView = findViewById(R.id.rv);
-
-        HabitAdapter habitAdapter = new HabitAdapter(habits);
-
-        habitRecyclerView.setAdapter(habitAdapter);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-
-        habitRecyclerView.setLayoutManager(llm);
-
     }
 
     public void openNewHabitActivity() {
@@ -204,6 +156,7 @@ public class HomeActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 System.out.println(gson.toJson(h));
                 habits.add(h);
+                habitAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -214,5 +167,72 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    class DayViewContainer extends ViewContainer {
+        private CalendarDay day;
+        private TextView textDay;
+        private View eventView;
+        public DayViewContainer(View view) {
+            super(view);
+            textDay = view.findViewById(R.id.calendarDayText);
+            eventView = view.findViewById(R.id.eventDotView);
+
+            textDay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (day.getOwner() == DayOwner.THIS_MONTH) {
+                        if (selectedDate == day.getDate()) {
+                            selectedDate = null;
+                            calendarView.notifyDayChanged(day);
+                        } else {
+                            LocalDate oldDate = selectedDate;
+                            selectedDate = day.getDate();
+                            calendarView.notifyDateChanged(day.getDate());
+                            if (oldDate != null)
+                            {
+                                calendarView.notifyDateChanged(oldDate);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        public void setDay(CalendarDay day) {
+            this.day = day;
+        }
+
+        public TextView getTextDay() {
+            return textDay;
+        }
+
+        public View getEventView() {
+            return eventView;
+        }
+    }
+
+    class MonthHeaderContainer extends ViewContainer {
+        private TextView textMonth;
+        private TextView textYear;
+
+        public MonthHeaderContainer(View view) {
+            super(view);
+            textMonth = view.findViewById(R.id.textMonth);
+            textYear = view.findViewById(R.id.textYear);
+        }
+
+        public TextView getTextMonth() {
+            return textMonth;
+        }
+
+        public TextView getTextYear() {
+            return textYear;
+        }
+    }
+
+    @Override
+    public void onHabitClick(int position) {
+
     }
 }

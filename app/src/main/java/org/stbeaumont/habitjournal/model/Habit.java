@@ -8,6 +8,7 @@ import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Habit implements Parcelable {
 
@@ -99,7 +100,20 @@ public class Habit implements Parcelable {
         return reminderTime;
     }
 
+    public int getNumberOfSuccesses() {
+        int count = 0;
+        for (Map.Entry<LocalDate, Boolean> entry : dateLog.entrySet()) {
+            if (entry.getValue()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public Boolean checkLogOnDate(LocalDate date) {
+        if (!dateLog.containsKey(date)) {
+            return false;
+        }
         return dateLog.get(date);
     }
 
