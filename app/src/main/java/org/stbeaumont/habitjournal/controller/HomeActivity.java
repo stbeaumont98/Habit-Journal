@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class HomeActivity extends AppCompatActivity implements HabitAdapter.HabitClickListener {
+public class HomeActivity extends AppCompatActivity implements HabitAdapter.HabitClickListener, GoalInfoDialogFragment.GoalInfoInterface {
 
     private LocalDate selectedDate = null;
     private ArrayList<Habit> habits = new ArrayList<>();
@@ -169,6 +169,12 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
+    @Override
+    public void updateData() {
+        habitAdapter.notifyDataSetChanged();
+        calendarView.notifyCalendarChanged();
+    }
+
     class DayViewContainer extends ViewContainer {
         private CalendarDay day;
         private TextView textDay;
@@ -233,7 +239,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
 
     @Override
     public void onHabitClick(int position) {
-        GoalInfoDialogFragment goalInfoDialogFragment = new GoalInfoDialogFragment(habits.get(position));
+        GoalInfoDialogFragment goalInfoDialogFragment = new GoalInfoDialogFragment(habits.get(position), this);
         goalInfoDialogFragment.show(getSupportFragmentManager(), "goal_info");
     }
 }

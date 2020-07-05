@@ -40,7 +40,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/info_progressbar_constraint"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -53,8 +53,8 @@
         <ProgressBar
             android:id="@+id/bg_progressbar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
             android:indeterminate="false"
             android:max="100"
             android:progress="100"
@@ -69,8 +69,8 @@
         <ProgressBar
             android:id="@+id/fg_progressbar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
             android:indeterminate="false"
             android:max="100"
             android:progress="75"
