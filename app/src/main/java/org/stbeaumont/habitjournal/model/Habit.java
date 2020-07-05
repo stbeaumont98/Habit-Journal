@@ -34,6 +34,18 @@ public class Habit implements Parcelable {
     private long reminderTime;
     private HashMap<LocalDate, Boolean> dateLog = new HashMap<>();
 
+    public Habit() {
+        name = "";
+        frequency = 0;
+        for (int i = 0; i < 7; i++) {
+            daysOfWeek.add(true);
+        }
+        weeklyInterval = 0;
+        dayOfMonth = 0;
+        hasGoal = false;
+        goal = 0;
+    }
+
     public Habit(String name, int frequency, ArrayList<Boolean> daysOfWeek, int weeklyInterval, int dayOfMonth, boolean hasGoal, int goal, long reminderTime) {
         this.name = name;
         this.frequency = frequency;
@@ -54,6 +66,7 @@ public class Habit implements Parcelable {
         hasGoal = in.readByte() != 0;
         goal = in.readInt();
         reminderTime = in.readLong();
+        in.readMap(dateLog, null);
     }
 
     public static final Creator<Habit> CREATOR = new Creator<Habit>() {
@@ -136,5 +149,38 @@ public class Habit implements Parcelable {
         dest.writeByte((byte) (this.hasGoal ? 1 : 0));
         dest.writeInt(this.goal);
         dest.writeLong(this.reminderTime);
+        dest.writeMap(this.dateLog);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
+
+    public void setDaysOfWeek(ArrayList<Boolean> daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
+    }
+
+    public void setWeeklyInterval(int weeklyInterval) {
+        this.weeklyInterval = weeklyInterval;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public void setHasGoal(boolean hasGoal) {
+        this.hasGoal = hasGoal;
+    }
+
+    public void setGoal(int goal) {
+        this.goal = goal;
+    }
+
+    public void setReminderTime(long reminderTime) {
+        this.reminderTime = reminderTime;
     }
 }

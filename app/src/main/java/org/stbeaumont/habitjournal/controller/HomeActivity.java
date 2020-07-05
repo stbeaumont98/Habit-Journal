@@ -1,5 +1,6 @@
 package org.stbeaumont.habitjournal.controller;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,8 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.kizitonwose.calendarview.CalendarView;
 import com.kizitonwose.calendarview.model.CalendarDay;
@@ -32,7 +32,6 @@ import org.threeten.bp.YearMonth;
 import org.threeten.bp.temporal.WeekFields;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity implements HabitAdapter.HabitClickListener, GoalInfoDialogFragment.GoalInfoInterface {
@@ -41,7 +40,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     private ArrayList<Habit> habits = new ArrayList<>();
     private HabitAdapter habitAdapter;
     private CalendarView calendarView;
-    private HashMap<LocalDate, ArrayList<Habit>> events = new HashMap<>();
+    GoalInfoDialogFragment goalInfoDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +56,12 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         if (actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openNewHabitActivity();
+                openEditHabitActivity(EditHabitActivity.MODE_NEW, null);
             }
         });
 
@@ -138,13 +137,19 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
                 TextView textMonth = container.getTextMonth();
                 TextView textYear = container.getTextYear();
                 textMonth.setText(capitalize(month.getYearMonth().getMonth().name().toLowerCase()));
-                textYear.setText(Integer.toString(month.getYear()));
+                textYear.setText(String.format(Locale.getDefault(), "%d", month.getYear()));
             }
         });
     }
 
-    public void openNewHabitActivity() {
-        Intent i = new Intent(this, NewHabitActivity.class);
+    public void openEditHabitActivity(int mode, @Nullable Integer position) {
+        Intent i = new Intent(this, EditHabitActivity.class);
+        if (mode == EditHabitActivity.MODE_EDIT) {
+            Habit h = habits.get(position);
+            i.putExtra("pos", position);
+            i.putExtra("habit", h);
+        }
+        i.putExtra("mode", mode);
         startActivityForResult(i, 1);
     }
 
@@ -152,10 +157,14 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
+                int mode = data.getIntExtra("mode", 0);
                 Habit h = data.getParcelableExtra("habit");
-                Gson gson = new Gson();
-                System.out.println(gson.toJson(h));
-                habits.add(h);
+                if (mode != EditHabitActivity.MODE_NEW) {
+                    int pos = data.getIntExtra("pos", 0);
+                    habits.set(pos, h);
+                } else {
+                    habits.add(h);
+                }
                 habitAdapter.notifyDataSetChanged();
             }
         }
@@ -173,6 +182,12 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     public void updateData() {
         habitAdapter.notifyDataSetChanged();
         calendarView.notifyCalendarChanged();
+    }
+
+    @Override
+    public void onEditClick(int position) {
+        goalInfoDialogFragment.dismiss();
+        openEditHabitActivity(EditHabitActivity.MODE_EDIT, position);
     }
 
     class DayViewContainer extends ViewContainer {
@@ -239,7 +254,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
 
     @Override
     public void onHabitClick(int position) {
-        GoalInfoDialogFragment goalInfoDialogFragment = new GoalInfoDialogFragment(habits.get(position), this);
+        goalInfoDialogFragment = new GoalInfoDialogFragment(habits.get(position), position,this);
         goalInfoDialogFragment.show(getSupportFragmentManager(), "goal_info");
     }
 }

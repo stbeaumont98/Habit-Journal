@@ -41,15 +41,16 @@
         android:layout_marginTop="?attr/actionBarSize" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:text="New Habit"
+        android:textColor="@android:color/white"
         app:backgroundTint="@color/colorPrimary"
-        app:srcCompat="@drawable/ic_round_add"
-        app:tint="@android:color/white" />
+        app:icon="@drawable/ic_round_add"
+        app:iconTint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,25 +32,27 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
 
-public class NewHabitActivity extends AppCompatActivity {
+public class EditHabitActivity extends AppCompatActivity {
+
+    public static final int MODE_NEW = 0;
+    public static final int MODE_EDIT = 1;
+
+    int mode;
+    int position;
 
     private int intReminderHour = 12;
     private int intReminderMin = 0;
     private boolean boolReminderSet = false;
 
-    private String habitName;
-    private int intFrequency; //daily, weekly, or monthly
-    private ArrayList<Boolean> daysOfWeekList = new ArrayList<>();
-    private int intWeeklyInterval = 0;
-    private int intDayOfMonth = 0;
-    private boolean boolHasGoal = false;
-    private int intGoal = 0;
-    private long longReminderTime = toMilliseconds(intReminderHour, intReminderMin);
+    Habit habit;
 
     private TextInputEditText editTextHabit;
     private TextView textViewReminderTime;
     private Button buttonEveryday;
+    private CheckBox checkBoxGoal;
+    private NumberPicker pickerWeeks;
     private ConstraintLayout constraintGoal;
+    private EditText editTextGoal;
     private NumberPicker pickerDayOfMonth;
     private TimePicker timePicker;
     ExtendedFloatingActionButton fab;
@@ -62,7 +65,7 @@ public class NewHabitActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_habit);
+        setContentView(R.layout.activity_edit_habit);
 
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
@@ -74,10 +77,6 @@ public class NewHabitActivity extends AppCompatActivity {
 
         if (actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
-
-        for (int i = 0; i < 7; i++) { //make it true for every day by default
-            daysOfWeekList.add(true);
-        }
 
         Button buttonDaily = findViewById(R.id.buttonDaily);
         Button buttonWeekly = findViewById(R.id.buttonWeekly);
@@ -126,43 +125,36 @@ public class NewHabitActivity extends AppCompatActivity {
         frequencyConstraintList.add(constraintWeekly);
         frequencyConstraintList.add(constraintMonthly);
 
-        NumberPicker pickerWeeks = findViewById(R.id.numberPickerWeeks);
+        pickerWeeks = findViewById(R.id.numberPickerWeeks);
         pickerDayOfMonth = findViewById(R.id.numberPickerDayOfMonth);
         pickerDayOfMonth.setEnabled(false);
-        NumberPicker pickerGoal = findViewById(R.id.numberPickerGoal);
+        editTextGoal = findViewById(R.id.editTextGoal);
 
         pickerWeeks.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                intWeeklyInterval = newVal;
+                habit.setWeeklyInterval(newVal);
             }
         });
 
         pickerDayOfMonth.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                intDayOfMonth = newVal;
+                habit.setDayOfMonth(newVal);
             }
         });
 
-        pickerGoal.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                intGoal = newVal;
-            }
-        });
-
-        CheckBox checkBoxGoal = findViewById(R.id.checkBoxGoal);
+        checkBoxGoal = findViewById(R.id.checkBoxGoal);
 
         checkBoxGoal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     constraintGoal.setVisibility(View.VISIBLE);
-                    boolHasGoal = true;
+                    habit.setHasGoal(true);
                 } else {
                     constraintGoal.setVisibility(View.GONE);
-                    boolHasGoal = false;
+                    habit.setHasGoal(false);
                 }
             }
         });
@@ -172,9 +164,6 @@ public class NewHabitActivity extends AppCompatActivity {
 
         pickerDayOfMonth.setMinValue(1);
         pickerDayOfMonth.setMaxValue(31);
-
-        pickerGoal.setMinValue(1);
-        pickerGoal.setMaxValue(999);
 
         for (int i = 0; i < 3; i++) {
             final int finalI = i;
@@ -193,17 +182,18 @@ public class NewHabitActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (isEveryDay()) {
                         for (int j = 0; j < 7; j++) {   //inverts the values
-                            boolean tempInverse = !daysOfWeekList.get(j);
-                            daysOfWeekList.set(j, tempInverse);
+                            boolean tempInverse = !habit.getDaysOfWeek().get(j);
+                            habit.getDaysOfWeek().set(j, tempInverse);
                         }
-                        boolean temp = daysOfWeekList.get(finalI);
-                        daysOfWeekList.set(finalI, !temp);
-                    } else if (!isEveryDay() && isOnlyOne() && daysOfWeekList.get(finalI)) {
+                        boolean temp = habit.getDaysOfWeek().get(finalI);
+                        habit.getDaysOfWeek().set(finalI, !temp);
+                    } else if (!isEveryDay() && isOnlyOne() && habit.getDaysOfWeek().get(finalI)) {
                         //do nothing
                     } else {
-                        boolean temp = daysOfWeekList.get(finalI);
-                        daysOfWeekList.set(finalI, !temp);
+                        boolean temp = habit.getDaysOfWeek().get(finalI);
+                        habit.getDaysOfWeek().set(finalI, !temp);
                     }
+                    habit.setDaysOfWeek(habit.getDaysOfWeek());
                     updateDayButtons();
                 }
             });
@@ -223,8 +213,9 @@ public class NewHabitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < 7; i++) { //set every day to true
-                    daysOfWeekList.set(i, true);
+                    habit.getDaysOfWeek().set(i, true);
                 }
+                habit.setDaysOfWeek(habit.getDaysOfWeek());
                 updateDayButtons();
             }
         });
@@ -232,7 +223,7 @@ public class NewHabitActivity extends AppCompatActivity {
         textViewReminderTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = NewHabitActivity.this.getLayoutInflater();
+                LayoutInflater inflater = EditHabitActivity.this.getLayoutInflater();
                 final View view = inflater.inflate(R.layout.timepicker_dialog_layout, null);
                 timePicker = view.findViewById(R.id.timePicker);
 
@@ -260,7 +251,7 @@ public class NewHabitActivity extends AppCompatActivity {
                 timePicker.setHour(hour);
                 timePicker.setMinute(min);
 
-                new MaterialAlertDialogBuilder(NewHabitActivity.this)
+                new MaterialAlertDialogBuilder(EditHabitActivity.this)
                         .setView(view)
                         .setNegativeButton(getString(R.string.timepicker_negative), null)
                         .setPositiveButton(getString(R.string.timepicker_positive), new DialogInterface.OnClickListener() {
@@ -275,16 +266,49 @@ public class NewHabitActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                habitName = Objects.requireNonNull(editTextHabit.getText()).toString();
-                Habit h = new Habit(habitName, intFrequency, daysOfWeekList, intWeeklyInterval, intDayOfMonth, boolHasGoal, intGoal, longReminderTime);
+                habit.setName(Objects.requireNonNull(editTextHabit.getText()).toString());
+                String goalValue = editTextGoal.getText().toString();
+                habit.setGoal(goalValue.isEmpty() ? 0 : Integer.parseInt(goalValue));
                 Intent intent = new Intent();
-                intent.putExtra("habit", h);
+                if (mode == MODE_EDIT) {
+                    intent.putExtra("pos", position);
+                }
+                intent.putExtra("mode", mode);
+                intent.putExtra("habit", habit);
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
 
+        Intent intent = getIntent();
+        mode = intent.getIntExtra("mode", 0);
+        position = intent.getIntExtra("pos", 0);
+
+        if (mode == MODE_EDIT) {
+            habit = intent.getParcelableExtra("habit");
+        } else {
+            habit = new Habit();
+        }
+
+        updateFields();
+    }
+
+    public void updateFields() {
+        editTextHabit.setText(habit.getName());
+        selectFrequency(habit.getFrequency());
         updateDayButtons();
+        pickerWeeks.setValue(habit.getWeeklyInterval());
+        if (habit.getDayOfMonth() == 1) {
+            selectDayOfMonth(0);
+        } else if (habit.getDayOfMonth() == 31) {
+            selectDayOfMonth(1);
+        } else {
+            selectDayOfMonth(2);
+        }
+        pickerDayOfMonth.setValue(habit.getDayOfMonth());
+        checkBoxGoal.setChecked(habit.hasGoal());
+        editTextGoal.setText(String.format(Locale.getDefault(), "%d", habit.getGoal()));
+        setReminderTime(toHours(habit.getReminderTime()), toMin(habit.getReminderTime()));
     }
 
     public void setReminderTime(int hour, int min) {
@@ -293,20 +317,20 @@ public class NewHabitActivity extends AppCompatActivity {
 
         intReminderHour = hour;
         intReminderMin = min;
-        longReminderTime = toMilliseconds(hour, min);
+        habit.setReminderTime(toMilliseconds(hour, min));
         boolReminderSet = true;
     }
 
     public void selectFrequency(int index) {
         for (int i = 0; i < 3; i++) {
             if (i == index) {
-                frequencyButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-                frequencyButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
+                frequencyButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
+                frequencyButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
                 frequencyConstraintList.get(i).setVisibility(View.VISIBLE);
-                intFrequency = i;
+                habit.setFrequency(i);;
             } else {
-                frequencyButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-                frequencyButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+                frequencyButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
+                frequencyButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
                 frequencyConstraintList.get(i).setVisibility(View.GONE);
             }
         }
@@ -315,19 +339,19 @@ public class NewHabitActivity extends AppCompatActivity {
     public void selectDayOfMonth(int index) {
         for (int i = 0; i < 3; i++) {
             if (i == index) {
-                dayOfMonthButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-                dayOfMonthButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
+                dayOfMonthButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
+                dayOfMonthButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
             } else {
-                dayOfMonthButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-                dayOfMonthButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+                dayOfMonthButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
+                dayOfMonthButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
             }
         }
         switch (index) {
             case 0:
-                intDayOfMonth = 1;
+                habit.setDayOfMonth(1);
                 break;
             case 1:
-                intDayOfMonth = 31;
+                habit.setDayOfMonth(31);
             case 2:
                 if (index == 2) {
                     pickerDayOfMonth.setEnabled(true);
@@ -343,43 +367,43 @@ public class NewHabitActivity extends AppCompatActivity {
     public void updateDayButtons() {
         if (isEveryDay()) {
             for (int i = 0; i < 7; i++) {
-                if (daysOfWeekList.get(i)) {
-                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+                if (habit.getDaysOfWeek().get(i)) {
+                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
+                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
                 } else {
-                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
+                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
+                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
                 }
             }
-            buttonEveryday.setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-            buttonEveryday.setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
+            buttonEveryday.setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
+            buttonEveryday.setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
         } else {
             for (int i = 0; i < 7; i++) {
-                if (daysOfWeekList.get(i)) {
-                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
-                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
+                if (habit.getDaysOfWeek().get(i)) {
+                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
+                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
                 } else {
-                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+                    dayButtonList.get(i).setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
+                    dayButtonList.get(i).setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
                 }
             }
-            buttonEveryday.setTextColor(ContextCompat.getColor(NewHabitActivity.this, R.color.colorPrimary));
-            buttonEveryday.setBackgroundColor(ContextCompat.getColor(NewHabitActivity.this, R.color.white));
+            buttonEveryday.setTextColor(ContextCompat.getColor(EditHabitActivity.this, R.color.colorPrimary));
+            buttonEveryday.setBackgroundColor(ContextCompat.getColor(EditHabitActivity.this, R.color.white));
         }
     }
 
     public boolean isEveryDay() {
-        return (daysOfWeekList.get(Habit.SUN)
-                && daysOfWeekList.get(Habit.MON)
-                && daysOfWeekList.get(Habit.TUE)
-                && daysOfWeekList.get(Habit.WED)
-                && daysOfWeekList.get(Habit.THU)
-                && daysOfWeekList.get(Habit.FRI)
-                && daysOfWeekList.get(Habit.SAT));
+        return (habit.getDaysOfWeek().get(Habit.SUN)
+                && habit.getDaysOfWeek().get(Habit.MON)
+                && habit.getDaysOfWeek().get(Habit.TUE)
+                && habit.getDaysOfWeek().get(Habit.WED)
+                && habit.getDaysOfWeek().get(Habit.THU)
+                && habit.getDaysOfWeek().get(Habit.FRI)
+                && habit.getDaysOfWeek().get(Habit.SAT));
     }
 
     public boolean isOnlyOne() {
-        if (Collections.frequency(daysOfWeekList, true) == 1) {
+        if (Collections.frequency(habit.getDaysOfWeek(), true) == 1) {
             return true;
         } else {
             return false;
@@ -388,5 +412,14 @@ public class NewHabitActivity extends AppCompatActivity {
 
     public long toMilliseconds(int hour, int min) {
         return ((long) hour * 3600000) + ((long) min * 60000);
+    }
+
+    public int toHours(long milliseconds) {
+        return (int) (milliseconds / 3600000);
+    }
+
+    public int toMin(long milliseconds) {
+        long remainder = milliseconds % 3600000;
+        return (int) remainder / 60000;
     }
 }
