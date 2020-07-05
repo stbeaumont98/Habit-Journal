@@ -233,6 +233,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
 
     @Override
     public void onHabitClick(int position) {
-
+        GoalInfoDialogFragment goalInfoDialogFragment = new GoalInfoDialogFragment(habits.get(position));
+        goalInfoDialogFragment.show(getSupportFragmentManager(), "goal_info");
     }
 }

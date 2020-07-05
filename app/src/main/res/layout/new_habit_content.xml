@@ -450,7 +450,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textWhatTime"
+                android:id="@+id/textNextReminder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -470,7 +470,7 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textWhatTime" />
+                app:layout_constraintTop_toBottomOf="@+id/textNextReminder" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
