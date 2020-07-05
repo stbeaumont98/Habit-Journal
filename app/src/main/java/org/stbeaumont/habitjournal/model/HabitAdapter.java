@@ -1,0 +1,84 @@
+package org.stbeaumont.habitjournal.model;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.stbeaumont.habitjournal.R;
+
+import java.util.ArrayList;
+
+public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder> {
+
+    private ArrayList<Habit> habits;
+    private HabitClickListener habitClickListener;
+
+    public HabitAdapter(ArrayList<Habit> habits, HabitClickListener habitClickListener) {
+        this.habits = habits;
+        this.habitClickListener = habitClickListener;
+    }
+
+    @NonNull
+    @Override
+    public HabitAdapter.HabitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        View v = inflater.inflate(R.layout.habit_list_item, parent, false);
+        return new HabitViewHolder(v, habitClickListener);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull HabitAdapter.HabitViewHolder holder, int position) {
+        Habit habit = habits.get(position);
+
+        TextView textHabitName = holder.habitName;
+        TextView textProgress = holder.habitProgress;
+
+        textHabitName.setText(habit.getName());
+
+        if (habit.hasGoal()) {
+            textProgress.setVisibility(View.VISIBLE);
+            String progress = habit.getNumberOfSuccesses() + "/" + habit.getGoal();
+            textProgress.setText(progress);
+        } else {
+            textProgress.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return habits.size();
+    }
+
+    public class HabitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView habitName;
+        private TextView habitProgress;
+        private HabitClickListener habitClickListener;
+
+        public HabitViewHolder(@NonNull View v, HabitClickListener habitClickListener) {
+            super(v);
+            this.habitName = v.findViewById(R.id.textHabitName);
+            this.habitProgress = v.findViewById(R.id.textGoalProgress);
+
+            this.habitClickListener = habitClickListener;
+
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            habitClickListener.onHabitClick(getAdapterPosition());
+        }
+    }
+
+    public interface HabitClickListener {
+        void onHabitClick(int position);
+    }
+}

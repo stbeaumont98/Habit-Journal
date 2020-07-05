@@ -423,34 +423,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textGoal">
 
-                <NumberPicker
-                    android:id="@+id/numberPickerGoal"
-                    android:layout_width="35dp"
-                    android:layout_height="100dp"
-                    android:theme="@style/NumberPickerText"
+                <EditText
+                    android:id="@+id/editTextGoal"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/textViewWeeks2"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textViewWeeks2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="time(s)"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/numberPickerGoal"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBaseline_toBaselineOf="@+id/editTextGoal"
+                    app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textWhatTime"
+                android:id="@+id/textNextReminder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -470,7 +465,7 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textWhatTime" />
+                app:layout_constraintTop_toBottomOf="@+id/textNextReminder" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
