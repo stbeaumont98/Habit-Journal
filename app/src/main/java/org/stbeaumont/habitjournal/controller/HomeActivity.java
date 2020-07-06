@@ -40,13 +40,18 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     private ArrayList<Habit> habits = new ArrayList<>();
     private HabitAdapter habitAdapter;
     private CalendarView calendarView;
-    GoalInfoDialogFragment goalInfoDialogFragment;
+    private GoalInfoDialogFragment goalInfoDialogFragment;
+    private DataStorage dataStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         AndroidThreeTen.init(this);
+
+        dataStorage = new DataStorage(this);
+
+        habits.addAll(dataStorage.loadData());
 
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
@@ -147,24 +152,20 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         if (mode == EditHabitActivity.MODE_EDIT) {
             Habit h = habits.get(position);
             i.putExtra("pos", position);
-            i.putExtra("habit", h);
         }
+        i.putExtra("habits", habits);
         i.putExtra("mode", mode);
         startActivityForResult(i, 1);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                int mode = data.getIntExtra("mode", 0);
-                Habit h = data.getParcelableExtra("habit");
-                if (mode != EditHabitActivity.MODE_NEW) {
-                    int pos = data.getIntExtra("pos", 0);
-                    habits.set(pos, h);
-                } else {
-                    habits.add(h);
-                }
+            if (resultCode == RESULT_OK) {
+                habits.clear();
+                ArrayList<Habit> h = data.getParcelableArrayListExtra("habits");
+                habits.addAll(h);
                 habitAdapter.notifyDataSetChanged();
             }
         }
@@ -182,6 +183,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     public void updateData() {
         habitAdapter.notifyDataSetChanged();
         calendarView.notifyCalendarChanged();
+        dataStorage.updateData(habits);
     }
 
     @Override

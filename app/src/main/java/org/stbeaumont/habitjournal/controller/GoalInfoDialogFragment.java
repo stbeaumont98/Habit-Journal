@@ -30,7 +30,6 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
     int habitPos;
     GoalInfoInterface goalInfoInterface;
     Boolean isPercent = true;
-    Boolean isDone = false;
 
     //Views
     TextView textGoalName;
@@ -66,9 +65,9 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isDone = isChecked;
-                fgProgressBar.setProgress(habit.getNumberOfSuccesses() + (isDone ? 1 : 0));
-                updateProgress(isDone);
+                habit.logDate(LocalDate.now(), isChecked);
+                fgProgressBar.setProgress(habit.getNumberOfSuccesses());
+                updateProgress();
             }
         });
 
@@ -85,13 +84,13 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
             fgProgressBar.setMax(habit.getGoal());
             fgProgressBar.setProgress(habit.getNumberOfSuccesses());
 
-            updateProgress(isDone);
+            updateProgress();
 
             textProgress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     isPercent = !isPercent;
-                    updateProgress(isDone);
+                    updateProgress();
                 }
             });
         } else {
@@ -103,16 +102,7 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
         String nextReminder = "The next reminder for this habit is ";
         textNextReminder.setText(nextReminder);
 
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                habit.logDate(LocalDate.now(), isDone);
-                goalInfoInterface.updateData();
-                dismiss();
-            }
-        });
-
-        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 goalInfoInterface.onEditClick(habitPos);
@@ -124,10 +114,16 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    public void updateProgress(Boolean isDone) {
-        float percent = (float) (habit.getNumberOfSuccesses() + (isDone ? 1 : 0)) / (float) habit.getGoal();
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        goalInfoInterface.updateData();
+    }
+
+    public void updateProgress() {
+        float percent = (float) habit.getNumberOfSuccesses() / (float) habit.getGoal();
         percent *= 100;
-        String progress = (isPercent ? String.format(Locale.getDefault(), "%.2f", percent) + "%" : (habit.getNumberOfSuccesses() + (isDone ? 1 : 0)) + "/" + habit.getGoal());
+        String progress = (isPercent ? String.format(Locale.getDefault(), "%.2f", percent) + "%" : habit.getNumberOfSuccesses() + "/" + habit.getGoal());
         textProgress.setText(progress);
     }
 

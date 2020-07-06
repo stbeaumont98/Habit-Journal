@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.stbeaumont.habitjournal.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder> {
 
@@ -44,7 +45,9 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
         if (habit.hasGoal()) {
             textProgress.setVisibility(View.VISIBLE);
-            String progress = habit.getNumberOfSuccesses() + "/" + habit.getGoal();
+            float percent = (float) habit.getNumberOfSuccesses() / (float) habit.getGoal();
+            percent *= 100;
+            String progress = String.format(Locale.getDefault(), "%.2f", percent) + "%";
             textProgress.setText(progress);
         } else {
             textProgress.setVisibility(View.GONE);
