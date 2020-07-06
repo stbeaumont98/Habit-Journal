@@ -2,4 +2,6 @@
     <string name="app_name">Habit Journal</string>
     <string name="timepicker_positive">Ok</string>
     <string name="timepicker_negative">Cancel</string>
+    <string name="notif_channel_name">Habit Reminder</string>
+    <string name="notif_channel_description">Reminder to keep up with your habit</string>
 </resources>

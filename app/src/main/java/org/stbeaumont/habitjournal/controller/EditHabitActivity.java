@@ -26,6 +26,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
+import org.stbeaumont.habitjournal.model.NotificationAlarm;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -271,6 +272,7 @@ public class EditHabitActivity extends AppCompatActivity {
                 Intent i = new Intent();
                 if (mode == MODE_EDIT) {
                     habits.set(position, habit);
+                    i.putExtra("pos", position);
                 } else {
                     habits.add(habit);
                 }

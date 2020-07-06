@@ -8,7 +8,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer;
 import org.stbeaumont.habitjournal.model.Habit;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.HabitAdapter;
+import org.stbeaumont.habitjournal.model.NotificationAlarm;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.YearMonth;
@@ -43,11 +47,20 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     private GoalInfoDialogFragment goalInfoDialogFragment;
     private DataStorage dataStorage;
 
+    private String CHANNEL_ID = "habit_reminder";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         AndroidThreeTen.init(this);
+
+        createNotificationChannel();
+
+        Intent i = getIntent();
+        if ((i.getFlags() & Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT) != 0) {
+            onHabitClick(i.getIntExtra("pos", 0));
+        }
 
         dataStorage = new DataStorage(this);
 
@@ -166,6 +179,9 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
                 habits.clear();
                 ArrayList<Habit> h = data.getParcelableArrayListExtra("habits");
                 habits.addAll(h);
+                int position = data.getIntExtra("pos", habits.size());
+                NotificationAlarm notificationAlarm = new NotificationAlarm(this, habits.get(position), position, CHANNEL_ID);
+                notificationAlarm.setUpAlarms();
                 habitAdapter.notifyDataSetChanged();
             }
         }
@@ -258,5 +274,21 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     public void onHabitClick(int position) {
         goalInfoDialogFragment = new GoalInfoDialogFragment(habits.get(position), position,this);
         goalInfoDialogFragment.show(getSupportFragmentManager(), "goal_info");
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notif_channel_name);
+            String description = getString(R.string.notif_channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
