@@ -1,5 +1,6 @@
 package org.stbeaumont.habitjournal.controller;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -45,6 +46,7 @@ public class EditHabitActivity extends AppCompatActivity {
     private boolean boolReminderSet = false;
 
     Habit habit;
+    ArrayList<Habit> habits;
 
     private TextInputEditText editTextHabit;
     private TextView textViewReminderTime;
@@ -55,7 +57,7 @@ public class EditHabitActivity extends AppCompatActivity {
     private EditText editTextGoal;
     private NumberPicker pickerDayOfMonth;
     private TimePicker timePicker;
-    ExtendedFloatingActionButton fab;
+    private ExtendedFloatingActionButton fab;
 
     private ArrayList<Button> frequencyButtonList = new ArrayList<>();
     private ArrayList<Button> dayButtonList = new ArrayList<>();
@@ -69,9 +71,6 @@ public class EditHabitActivity extends AppCompatActivity {
 
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -269,23 +268,36 @@ public class EditHabitActivity extends AppCompatActivity {
                 habit.setName(Objects.requireNonNull(editTextHabit.getText()).toString());
                 String goalValue = editTextGoal.getText().toString();
                 habit.setGoal(goalValue.isEmpty() ? 0 : Integer.parseInt(goalValue));
-                Intent intent = new Intent();
+                Intent i = new Intent();
                 if (mode == MODE_EDIT) {
-                    intent.putExtra("pos", position);
+                    habits.set(position, habit);
+                } else {
+                    habits.add(habit);
                 }
-                intent.putExtra("mode", mode);
-                intent.putExtra("habit", habit);
-                setResult(RESULT_OK, intent);
+                i.putExtra("habits", habits);
+                setResult(RESULT_OK, i);
                 finish();
             }
         });
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent i = new Intent();
+                i.putExtra("habits", habits);
+                setResult(RESULT_OK, i);
+                finish();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode", 0);
         position = intent.getIntExtra("pos", 0);
+        habits = intent.getParcelableArrayListExtra("habits");
 
         if (mode == MODE_EDIT) {
-            habit = intent.getParcelableExtra("habit");
+            habit = habits.get(position);
         } else {
             habit = new Habit();
         }
