@@ -133,9 +133,8 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
                         textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, android.R.color.black));
                         textDay.setBackgroundResource(0);
                         dotView.setVisibility(View.INVISIBLE);
-                        for (Habit h : habits) {
-                            dotView.setVisibility(h.checkLogOnDate(day.getDate()) ? View.VISIBLE : View.INVISIBLE);
-                        }
+
+                        dotView.setVisibility(checkAllLogs(day) ? View.VISIBLE : View.INVISIBLE);
                     }
                 } else {
                     textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, android.R.color.darker_gray));
@@ -179,9 +178,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
                 habits.clear();
                 ArrayList<Habit> h = data.getParcelableArrayListExtra("habits");
                 habits.addAll(h);
-                int position = data.getIntExtra("pos", habits.size());
-                NotificationAlarm notificationAlarm = new NotificationAlarm(this, habits.get(position), position, CHANNEL_ID);
-                notificationAlarm.setUpAlarms();
+                int position = data.getIntExtra("pos", habits.size() - 1);
                 habitAdapter.notifyDataSetChanged();
             }
         }
@@ -290,5 +287,16 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private boolean checkAllLogs(CalendarDay day) {
+        int i = 0;
+        while (i < habits.size()) {
+            if (habits.get(i).checkLogOnDate(day.getDate())) {
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
 }

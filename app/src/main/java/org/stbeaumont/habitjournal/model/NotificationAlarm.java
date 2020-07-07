@@ -56,12 +56,12 @@ public class NotificationAlarm {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.DAY_OF_WEEK, days[i]);
 
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, min);
+
                 if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
                     calendar.add(Calendar.DAY_OF_YEAR, 7);
                 }
-
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, min);
 
                 Intent intent = new Intent(context, CustomReceiver.class);
                 intent.putExtra("title", title);

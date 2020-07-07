@@ -41,6 +41,6 @@ public class CustomReceiver extends BroadcastReceiver {
                         PendingIntent.FLAG_ONE_SHOT
                 );
 
-        manager.notify(12345, builder.build());
+        manager.notify(1, builder.build());
     }
 }
