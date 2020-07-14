@@ -33,8 +33,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View v = inflater.inflate(R.layout.habit_list_item, parent, false);
-
-        System.out.println("onCreateViewHolder");
         return new HabitViewHolder(v, habitClickListener);
     }
 
@@ -58,8 +56,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         } else {
             textProgress.setVisibility(View.GONE);
         }
-
-        System.out.println("onBindViewHolder");
     }
 
     @Override
@@ -83,8 +79,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             this.habitClickListener = habitClickListener;
 
             v.setOnClickListener(this);
-
-            System.out.println("HabitViewHolder");
         }
 
         @Override

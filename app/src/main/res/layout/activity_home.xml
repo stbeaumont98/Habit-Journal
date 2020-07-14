@@ -45,12 +45,13 @@
         android:id="@+id/fab_new_habit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:text="New Habit"
         android:textColor="@android:color/white"
         app:backgroundTint="@color/colorPrimary"
         app:icon="@drawable/ic_round_add"
-        app:iconTint="@android:color/white" />
+        app:iconTint="@android:color/white"
+        app:layout_anchor="@id/rv_home_list"
+        app:layout_anchorGravity="bottom|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
