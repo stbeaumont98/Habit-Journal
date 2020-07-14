@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,24 +18,24 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextHabit"
+                android:id="@+id/outlined_text_habit"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="What habit would you like to work on?"
-                app:boxCornerRadiusBottomEnd="@dimen/corner_radius"
-                app:boxCornerRadiusBottomStart="@dimen/corner_radius"
-                app:boxCornerRadiusTopEnd="@dimen/corner_radius"
-                app:boxCornerRadiusTopStart="@dimen/corner_radius"
+                android:hint="@string/name_prompt"
+                app:boxCornerRadiusBottomEnd="@dimen/small_corner_radius"
+                app:boxCornerRadiusBottomStart="@dimen/small_corner_radius"
+                app:boxCornerRadiusTopEnd="@dimen/small_corner_radius"
+                app:boxCornerRadiusTopStart="@dimen/small_corner_radius"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextHabit"
+                    android:id="@+id/edit_text_habit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -44,85 +43,85 @@
 
 
             <TextView
-                android:id="@+id/textRepeat"
+                android:id="@+id/text_prompt_frequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="How often would you like to repeat this habit?"
+                android:text="@string/frequency_prompt"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/outlinedTextHabit" />
+                app:layout_constraintTop_toBottomOf="@+id/outlined_text_habit" />
 
 
             <Button
-                android:id="@+id/buttonDaily"
+                android:id="@+id/button_daily"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Daily"
-                app:cornerRadius="@dimen/corner_radius"
-                app:layout_constraintEnd_toStartOf="@+id/buttonWeekly"
+                android:text="@string/daily"
+                app:cornerRadius="@dimen/small_corner_radius"
+                app:layout_constraintEnd_toStartOf="@+id/button_weekly"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textRepeat"
+                app:layout_constraintTop_toBottomOf="@+id/text_prompt_frequency"
                 app:strokeColor="@color/colorPrimary"
                 app:strokeWidth="2dp" />
 
             <Button
-                android:id="@+id/buttonWeekly"
+                android:id="@+id/button_weekly"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:backgroundTint="@android:color/white"
-                android:text="Weekly"
+                android:text="@string/weekly"
                 android:textColor="@color/colorPrimary"
-                app:cornerRadius="@dimen/corner_radius"
-                app:layout_constraintBaseline_toBaselineOf="@+id/buttonDaily"
-                app:layout_constraintEnd_toStartOf="@+id/buttonMonthly"
+                app:cornerRadius="@dimen/small_corner_radius"
+                app:layout_constraintBaseline_toBaselineOf="@+id/button_daily"
+                app:layout_constraintEnd_toStartOf="@+id/button_monthly"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/buttonDaily"
+                app:layout_constraintStart_toEndOf="@+id/button_daily"
                 app:strokeColor="@color/colorPrimary"
                 app:strokeWidth="2dp" />
 
             <Button
-                android:id="@+id/buttonMonthly"
+                android:id="@+id/button_monthly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:backgroundTint="@android:color/white"
-                android:text="Monthly"
+                android:text="@string/monthly"
                 android:textColor="@color/colorPrimary"
-                app:cornerRadius="@dimen/corner_radius"
-                app:layout_constraintBaseline_toBaselineOf="@+id/buttonWeekly"
+                app:cornerRadius="@dimen/small_corner_radius"
+                app:layout_constraintBaseline_toBaselineOf="@+id/button_weekly"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/buttonWeekly"
+                app:layout_constraintStart_toEndOf="@+id/button_weekly"
                 app:strokeColor="@color/colorPrimary"
                 app:strokeWidth="2dp" />
 
             <TextView
-                android:id="@+id/textWhen"
+                android:id="@+id/text_prompt_when"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="When?"
+                android:text="@string/when_prompt"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonDaily" />
+                app:layout_constraintTop_toBottomOf="@+id/button_daily" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintWhen"
+                android:id="@+id/constraint_when"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textWhen">
+                app:layout_constraintTop_toBottomOf="@+id/text_prompt_when">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintDaily"
+                    android:id="@+id/constraint_daily"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
@@ -132,16 +131,16 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <Button
-                        android:id="@+id/buttonSunday"
+                        android:id="@+id/button_sunday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:backgroundTint="@android:color/white"
                         android:padding="10dp"
-                        android:text="S"
+                        android:text="@string/day_sun_sat"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonMonday"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintEnd_toStartOf="@+id/button_monday"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -149,128 +148,128 @@
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonMonday"
+                        android:id="@+id/button_monday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:backgroundTint="@android:color/white"
                         android:padding="10dp"
-                        android:text="M"
+                        android:text="@string/day_mon"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonSunday"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonTuesday"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/button_sunday"
+                        app:layout_constraintEnd_toStartOf="@+id/button_tuesday"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonSunday"
+                        app:layout_constraintStart_toEndOf="@+id/button_sunday"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonTuesday"
+                        android:id="@+id/button_tuesday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:backgroundTint="@android:color/white"
                         android:padding="10dp"
-                        android:text="T"
+                        android:text="@string/day_tue_thu"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonMonday"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonWednesday"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/button_monday"
+                        app:layout_constraintEnd_toStartOf="@+id/button_wednesday"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonMonday"
+                        app:layout_constraintStart_toEndOf="@+id/button_monday"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonWednesday"
+                        android:id="@+id/button_wednesday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:backgroundTint="@android:color/white"
                         android:padding="10dp"
-                        android:text="W"
+                        android:text="@string/day_wed"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonTuesday"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonThursday"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/button_tuesday"
+                        app:layout_constraintEnd_toStartOf="@+id/button_thursday"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonTuesday"
+                        app:layout_constraintStart_toEndOf="@+id/button_tuesday"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonThursday"
+                        android:id="@+id/button_thursday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:backgroundTint="@android:color/white"
                         android:padding="10dp"
-                        android:text="T"
+                        android:text="@string/day_tue_thu"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonWednesday"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonFriday"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/button_wednesday"
+                        app:layout_constraintEnd_toStartOf="@+id/button_friday"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonWednesday"
+                        app:layout_constraintStart_toEndOf="@+id/button_wednesday"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonFriday"
+                        android:id="@+id/button_friday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:backgroundTint="@android:color/white"
                         android:padding="10dp"
-                        android:text="F"
+                        android:text="@string/day_fri"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonThursday"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonSaturday"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/button_thursday"
+                        app:layout_constraintEnd_toStartOf="@+id/button_saturday"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonThursday"
+                        app:layout_constraintStart_toEndOf="@+id/button_thursday"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonSaturday"
+                        android:id="@+id/button_saturday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
                         android:backgroundTint="@android:color/white"
                         android:padding="10dp"
-                        android:text="S"
+                        android:text="@string/day_sun_sat"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonFriday"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/button_friday"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonFriday"
+                        app:layout_constraintStart_toEndOf="@+id/button_friday"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonEveryday"
+                        android:id="@+id/button_everyday"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:padding="10dp"
-                        android:text="Everyday"
-                        app:cornerRadius="@dimen/corner_radius"
+                        android:text="@string/everyday"
+                        app:cornerRadius="@dimen/small_corner_radius"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/buttonWednesday"
+                        app:layout_constraintTop_toBottomOf="@+id/button_wednesday"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintWeekly"
+                    android:id="@+id/constraint_weekly"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
@@ -280,46 +279,46 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/textViewEvery"
+                        android:id="@+id/text_every"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Every"
+                        android:text="@string/every"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/numberPickerWeeks"
+                        app:layout_constraintEnd_toStartOf="@+id/picker_weeks"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <NumberPicker
-                        android:id="@+id/numberPickerWeeks"
+                        android:id="@+id/picker_weeks"
                         android:layout_width="35dp"
                         android:layout_height="75dp"
                         android:layout_marginStart="16dp"
                         android:theme="@style/NumberPickerText"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textViewWeeks"
+                        app:layout_constraintEnd_toStartOf="@+id/text_weeks"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textViewEvery"
+                        app:layout_constraintStart_toEndOf="@+id/text_every"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textViewWeeks"
+                        android:id="@+id/text_weeks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="weeks"
+                        android:text="@string/weeks"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/numberPickerWeeks"
+                        app:layout_constraintStart_toEndOf="@+id/picker_weeks"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintMonthly"
+                    android:id="@+id/constraint_monthly"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
@@ -329,13 +328,13 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <Button
-                        android:id="@+id/buttonFirst"
+                        android:id="@+id/button_first"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="First of the month"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonLast"
+                        android:text="@string/first"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintEnd_toStartOf="@+id/button_last"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -343,41 +342,41 @@
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonLast"
+                        android:id="@+id/button_last"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:backgroundTint="@color/white"
-                        android:text="Last of the month"
+                        android:text="@string/last"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/buttonFirst"
+                        app:cornerRadius="@dimen/small_corner_radius"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/button_first"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonFirst"
+                        app:layout_constraintStart_toEndOf="@+id/button_first"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <Button
-                        android:id="@+id/buttonCustom"
+                        android:id="@+id/button_custom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
-                        android:text="Custom"
+                        android:text="@string/custom"
                         android:textColor="@color/colorPrimary"
-                        app:cornerRadius="@dimen/corner_radius"
+                        app:cornerRadius="@dimen/small_corner_radius"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/numberPickerDayOfMonth"
+                        app:layout_constraintEnd_toStartOf="@+id/picker_day_of_month"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/buttonFirst"
+                        app:layout_constraintTop_toBottomOf="@+id/button_first"
                         app:strokeColor="@color/colorPrimary"
                         app:strokeWidth="2dp" />
 
                     <NumberPicker
-                        android:id="@+id/numberPickerDayOfMonth"
+                        android:id="@+id/picker_day_of_month"
                         android:layout_width="35dp"
                         android:layout_height="100dp"
                         android:layout_marginStart="16dp"
@@ -385,87 +384,89 @@
                         android:theme="@style/NumberPickerText"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/buttonCustom"
-                        app:layout_constraintTop_toBottomOf="@+id/buttonFirst" />
+                        app:layout_constraintStart_toEndOf="@+id/button_custom"
+                        app:layout_constraintTop_toBottomOf="@+id/button_first" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textGoal"
+                android:id="@+id/text_prompt_goal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Do you have a goal?"
-                app:layout_constraintEnd_toStartOf="@+id/checkBoxGoal"
+                android:text="@string/goal_prompt"
+                app:layout_constraintEnd_toStartOf="@+id/check_box_goal"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintWhen" />
+                app:layout_constraintTop_toBottomOf="@+id/constraint_when" />
 
             <CheckBox
-                android:id="@+id/checkBoxGoal"
+                android:id="@+id/check_box_goal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textGoal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/text_prompt_goal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textGoal" />
+                app:layout_constraintStart_toEndOf="@+id/text_prompt_goal" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintGoal"
+                android:id="@+id/constraint_goal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textGoal">
+                app:layout_constraintTop_toBottomOf="@+id/text_prompt_goal">
 
                 <EditText
-                    android:id="@+id/editTextGoal"
-                    android:layout_width="100dp"
+                    android:id="@+id/edit_text_goal"
+                    android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number"
+                    android:maxLength="3"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textViewWeeks2"
+                    app:layout_constraintEnd_toStartOf="@+id/text_times"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textViewWeeks2"
+                    android:id="@+id/text_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="time(s)"
+                    android:text="@string/times"
                     android:textSize="18sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/editTextGoal"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_goal"
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textNextReminder"
+                android:id="@+id/text_prompt_reminder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="What time would you like a reminder?"
+                android:text="@string/reminder_prompt"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintGoal" />
+                app:layout_constraintTop_toBottomOf="@+id/constraint_goal" />
 
             <TextView
-                android:id="@+id/textReminderTime"
+                android:id="@+id/text_reminder_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="96dp"
-                android:text="12:00 PM"
+                android:text="@string/default_time"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textNextReminder" />
+                app:layout_constraintTop_toBottomOf="@+id/text_prompt_reminder" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

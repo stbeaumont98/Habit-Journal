@@ -1,8 +1,6 @@
 package org.stbeaumont.habitjournal.controller;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -60,7 +58,11 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
         fgProgressBar = v.findViewById(R.id.fg_progressbar);
         textNextReminder = v.findViewById(R.id.info_next_reminder);
 
-        checkBox.setChecked(habit.checkLogOnDate(LocalDate.now()));
+        try {
+            checkBox.setChecked(habit.checkLogOnDate(LocalDate.now()));
+        } catch (Habit.NoLogForDateException e) {
+            checkBox.setChecked(false);
+        }
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

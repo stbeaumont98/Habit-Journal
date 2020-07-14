@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -123,9 +122,9 @@ public class Habit implements Parcelable {
         return count;
     }
 
-    public Boolean checkLogOnDate(LocalDate date) {
+    public Boolean checkLogOnDate(LocalDate date) throws NoLogForDateException {
         if (!dateLog.containsKey(date)) {
-            return false;
+            throw new NoLogForDateException(this.name + "There is no log for this date.");
         }
         return dateLog.get(date);
     }
@@ -182,5 +181,13 @@ public class Habit implements Parcelable {
 
     public void setReminderTime(long reminderTime) {
         this.reminderTime = reminderTime;
+    }
+
+    public class NoLogForDateException extends Exception
+    {
+        public NoLogForDateException(String message)
+        {
+            super(message);
+        }
     }
 }

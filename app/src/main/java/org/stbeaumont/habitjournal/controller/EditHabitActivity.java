@@ -77,21 +77,21 @@ public class EditHabitActivity extends AppCompatActivity {
         if (actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
 
-        Button buttonDaily = findViewById(R.id.buttonDaily);
-        Button buttonWeekly = findViewById(R.id.buttonWeekly);
-        Button buttonMonthly = findViewById(R.id.buttonMonthly);
-        Button buttonSun = findViewById(R.id.buttonSunday);
-        Button buttonMon = findViewById(R.id.buttonMonday);
-        Button buttonTue = findViewById(R.id.buttonTuesday);
-        Button buttonWed = findViewById(R.id.buttonWednesday);
-        Button buttonThu = findViewById(R.id.buttonThursday);
-        Button buttonFri = findViewById(R.id.buttonFriday);
-        Button buttonSat = findViewById(R.id.buttonSaturday);
-        Button buttonFirstDay = findViewById(R.id.buttonFirst);
-        Button buttonLastDay = findViewById(R.id.buttonLast);
-        Button buttonCustomDay = findViewById(R.id.buttonCustom);
+        Button buttonDaily = findViewById(R.id.button_daily);
+        Button buttonWeekly = findViewById(R.id.button_weekly);
+        Button buttonMonthly = findViewById(R.id.button_monthly);
+        Button buttonSun = findViewById(R.id.button_sunday);
+        Button buttonMon = findViewById(R.id.button_monday);
+        Button buttonTue = findViewById(R.id.button_tuesday);
+        Button buttonWed = findViewById(R.id.button_wednesday);
+        Button buttonThu = findViewById(R.id.button_thursday);
+        Button buttonFri = findViewById(R.id.button_friday);
+        Button buttonSat = findViewById(R.id.button_saturday);
+        Button buttonFirstDay = findViewById(R.id.button_first);
+        Button buttonLastDay = findViewById(R.id.button_last);
+        Button buttonCustomDay = findViewById(R.id.button_custom);
 
-        fab = findViewById(R.id.fabCreateHabit);
+        fab = findViewById(R.id.fab_save);
 
         frequencyButtonList.add(buttonDaily);
         frequencyButtonList.add(buttonWeekly);
@@ -109,25 +109,25 @@ public class EditHabitActivity extends AppCompatActivity {
         dayOfMonthButtonList.add(buttonLastDay);
         dayOfMonthButtonList.add(buttonCustomDay);
 
-        buttonEveryday = findViewById(R.id.buttonEveryday);
+        buttonEveryday = findViewById(R.id.button_everyday);
 
-        editTextHabit = findViewById(R.id.editTextHabit);
+        editTextHabit = findViewById(R.id.edit_text_habit);
 
-        textViewReminderTime = findViewById(R.id.textReminderTime);
+        textViewReminderTime = findViewById(R.id.text_reminder_time);
 
-        ConstraintLayout constraintDaily = findViewById(R.id.constraintDaily);
-        ConstraintLayout constraintWeekly = findViewById(R.id.constraintWeekly);
-        ConstraintLayout constraintMonthly = findViewById(R.id.constraintMonthly);
-        constraintGoal = findViewById(R.id.constraintGoal);
+        ConstraintLayout constraintDaily = findViewById(R.id.constraint_daily);
+        ConstraintLayout constraintWeekly = findViewById(R.id.constraint_weekly);
+        ConstraintLayout constraintMonthly = findViewById(R.id.constraint_monthly);
+        constraintGoal = findViewById(R.id.constraint_goal);
 
         frequencyConstraintList.add(constraintDaily);
         frequencyConstraintList.add(constraintWeekly);
         frequencyConstraintList.add(constraintMonthly);
 
-        pickerWeeks = findViewById(R.id.numberPickerWeeks);
-        pickerDayOfMonth = findViewById(R.id.numberPickerDayOfMonth);
+        pickerWeeks = findViewById(R.id.picker_weeks);
+        pickerDayOfMonth = findViewById(R.id.picker_day_of_month);
         pickerDayOfMonth.setEnabled(false);
-        editTextGoal = findViewById(R.id.editTextGoal);
+        editTextGoal = findViewById(R.id.edit_text_goal);
 
         pickerWeeks.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -143,7 +143,7 @@ public class EditHabitActivity extends AppCompatActivity {
             }
         });
 
-        checkBoxGoal = findViewById(R.id.checkBoxGoal);
+        checkBoxGoal = findViewById(R.id.check_box_goal);
 
         checkBoxGoal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -224,7 +224,7 @@ public class EditHabitActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LayoutInflater inflater = EditHabitActivity.this.getLayoutInflater();
                 final View view = inflater.inflate(R.layout.timepicker_dialog_layout, null);
-                timePicker = view.findViewById(R.id.timePicker);
+                timePicker = view.findViewById(R.id.time_picker);
 
                 Calendar calendar = Calendar.getInstance();
                 int hour, min;

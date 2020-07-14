@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         if (actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
 
-        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab_new_habit);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,11 +70,11 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
             }
         });
 
-        calendarView = findViewById(R.id.calendarView);
+        calendarView = findViewById(R.id.calendar_view);
 
         setupCalendar(calendarView);
 
-        RecyclerView habitRecyclerView = findViewById(R.id.rv);
+        RecyclerView habitRecyclerView = findViewById(R.id.rv_home_list);
 
         habitAdapter = new HabitAdapter(habits, this);
 
@@ -119,10 +119,7 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
                     } else {
                         textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, android.R.color.black));
                         textDay.setBackgroundResource(0);
-                        dotView.setVisibility(View.INVISIBLE);
-                        for (Habit h : habits) {
-                            dotView.setVisibility(h.checkLogOnDate(day.getDate()) ? View.VISIBLE : View.INVISIBLE);
-                        }
+                        dotView.setVisibility(checkAllLogs(day) ? View.VISIBLE : View.INVISIBLE);
                     }
                 } else {
                     textDay.setTextColor(ContextCompat.getColor(HomeActivity.this, android.R.color.darker_gray));
@@ -198,13 +195,18 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         private View eventView;
         public DayViewContainer(View view) {
             super(view);
-            textDay = view.findViewById(R.id.calendarDayText);
-            eventView = view.findViewById(R.id.eventDotView);
+            textDay = view.findViewById(R.id.text_calendar_day);
+            eventView = view.findViewById(R.id.dot_event);
 
             textDay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (day.getOwner() == DayOwner.THIS_MONTH) {
+
+                        //Display habits logged on that day
+                        DayInfoDialogFragment dayInfoDialogFragment = new DayInfoDialogFragment(habits, day.getDate());
+                        dayInfoDialogFragment.show(getSupportFragmentManager(), "day_info");
+
                         if (selectedDate == day.getDate()) {
                             selectedDate = null;
                             calendarView.notifyDayChanged(day);
@@ -241,8 +243,8 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
 
         public MonthHeaderContainer(View view) {
             super(view);
-            textMonth = view.findViewById(R.id.textMonth);
-            textYear = view.findViewById(R.id.textYear);
+            textMonth = view.findViewById(R.id.text_calendar_month);
+            textYear = view.findViewById(R.id.text_calendar_year);
         }
 
         public TextView getTextMonth() {
@@ -258,5 +260,19 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     public void onHabitClick(int position) {
         goalInfoDialogFragment = new GoalInfoDialogFragment(habits.get(position), position,this);
         goalInfoDialogFragment.show(getSupportFragmentManager(), "goal_info");
+    }
+
+    private boolean checkAllLogs(CalendarDay day) {
+        int i = 0;
+        while (i < habits.size()) {
+            try {
+                if (habits.get(i).checkLogOnDate(day.getDate())) {
+                    return true;
+                }
+            } catch (Habit.NoLogForDateException e) {
+            }
+            i++;
+        }
+        return false;
     }
 }
