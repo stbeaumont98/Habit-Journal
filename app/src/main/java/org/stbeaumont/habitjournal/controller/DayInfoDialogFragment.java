@@ -28,9 +28,6 @@ public class DayInfoDialogFragment extends AppCompatDialogFragment {
     private LocalDate date;
     private ArrayList<Habit> habits;
 
-    private TextView textDate;
-    private RecyclerView rvDayList;
-
     public DayInfoDialogFragment(ArrayList<Habit> habits, LocalDate date) {
         this.date = date;
         this.habits = new ArrayList<>(getHabitsForDay(habits, date));
@@ -44,8 +41,8 @@ public class DayInfoDialogFragment extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.day_info_layout, null);
 
-        textDate = v.findViewById(R.id.info_selected_date);
-        rvDayList = v.findViewById(R.id.rv_day_list);
+        TextView textDate = v.findViewById(R.id.info_selected_date);
+        RecyclerView rvDayList = v.findViewById(R.id.rv_day_list);
 
         textDate.setText(date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
 

@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.stbeaumont.habitjournal.R;
-import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Locale;

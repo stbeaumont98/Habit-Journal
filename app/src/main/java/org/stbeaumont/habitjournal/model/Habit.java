@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class Habit implements Parcelable {
     private int dayOfMonth;
     private boolean hasGoal;
     private int goal;
-    private long reminderTime;
+    private LocalTime reminderTime;
     private HashMap<LocalDate, Boolean> dateLog = new HashMap<>();
 
     public Habit() {
@@ -43,9 +44,10 @@ public class Habit implements Parcelable {
         dayOfMonth = 0;
         hasGoal = false;
         goal = 0;
+        reminderTime = LocalTime.of(12, 0);
     }
 
-    public Habit(String name, int frequency, ArrayList<Boolean> daysOfWeek, int weeklyInterval, int dayOfMonth, boolean hasGoal, int goal, long reminderTime) {
+    public Habit(String name, int frequency, ArrayList<Boolean> daysOfWeek, int weeklyInterval, int dayOfMonth, boolean hasGoal, int goal, LocalTime reminderTime) {
         this.name = name;
         this.frequency = frequency;
         this.daysOfWeek = daysOfWeek;
@@ -64,7 +66,7 @@ public class Habit implements Parcelable {
         dayOfMonth = in.readInt();
         hasGoal = in.readByte() != 0;
         goal = in.readInt();
-        reminderTime = in.readLong();
+        reminderTime = (LocalTime) in.readSerializable();
         in.readMap(dateLog, null);
     }
 
@@ -108,7 +110,7 @@ public class Habit implements Parcelable {
         return goal;
     }
 
-    public long getReminderTime() {
+    public LocalTime getReminderTime() {
         return reminderTime;
     }
 
@@ -147,7 +149,7 @@ public class Habit implements Parcelable {
         dest.writeInt(this.dayOfMonth);
         dest.writeByte((byte) (this.hasGoal ? 1 : 0));
         dest.writeInt(this.goal);
-        dest.writeLong(this.reminderTime);
+        dest.writeSerializable(this.reminderTime);
         dest.writeMap(this.dateLog);
     }
 
@@ -179,7 +181,7 @@ public class Habit implements Parcelable {
         this.goal = goal;
     }
 
-    public void setReminderTime(long reminderTime) {
+    public void setReminderTime(LocalTime reminderTime) {
         this.reminderTime = reminderTime;
     }
 

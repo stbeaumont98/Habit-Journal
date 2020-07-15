@@ -18,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -50,8 +49,6 @@ public class DataStorage {
      * string and saves the data to internal storage */
     public void updateData(ArrayList <Habit> habits) {
         String goalJson = gson.toJson(habits);
-
-        System.out.println(goalJson);
 
         try {
             FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE);

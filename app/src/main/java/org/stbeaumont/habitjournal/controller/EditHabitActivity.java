@@ -26,6 +26,8 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,7 +59,6 @@ public class EditHabitActivity extends AppCompatActivity {
     private EditText editTextGoal;
     private NumberPicker pickerDayOfMonth;
     private TimePicker timePicker;
-    private ExtendedFloatingActionButton fab;
 
     private ArrayList<Button> frequencyButtonList = new ArrayList<>();
     private ArrayList<Button> dayButtonList = new ArrayList<>();
@@ -91,7 +92,7 @@ public class EditHabitActivity extends AppCompatActivity {
         Button buttonLastDay = findViewById(R.id.button_last);
         Button buttonCustomDay = findViewById(R.id.button_custom);
 
-        fab = findViewById(R.id.fab_save);
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab_save);
 
         frequencyButtonList.add(buttonDaily);
         frequencyButtonList.add(buttonWeekly);
@@ -256,7 +257,7 @@ public class EditHabitActivity extends AppCompatActivity {
                         .setPositiveButton(getString(R.string.timepicker_positive), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                setReminderTime(timePicker.getHour(), timePicker.getMinute());
+                                setReminderTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
                             }
                         }).show();
             }
@@ -316,20 +317,19 @@ public class EditHabitActivity extends AppCompatActivity {
             selectDayOfMonth(1);
         } else {
             selectDayOfMonth(2);
+            pickerDayOfMonth.setValue(habit.getDayOfMonth());
         }
-        pickerDayOfMonth.setValue(habit.getDayOfMonth());
         checkBoxGoal.setChecked(habit.hasGoal());
         editTextGoal.setText(String.format(Locale.getDefault(), "%d", habit.getGoal()));
-        setReminderTime(toHours(habit.getReminderTime()), toMin(habit.getReminderTime()));
+        setReminderTime(habit.getReminderTime());
     }
 
-    public void setReminderTime(int hour, int min) {
-        String time = String.format(Locale.getDefault(),"%d:%02d", (hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)), min) + (hour >= 12 ? " PM" : " AM");
+    public void setReminderTime(LocalTime reminderTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        String time = reminderTime.format(formatter);
         textViewReminderTime.setText(time);
 
-        intReminderHour = hour;
-        intReminderMin = min;
-        habit.setReminderTime(toMilliseconds(hour, min));
+        habit.setReminderTime(reminderTime);
         boolReminderSet = true;
     }
 

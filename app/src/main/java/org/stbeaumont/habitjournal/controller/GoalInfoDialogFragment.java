@@ -18,8 +18,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
+import org.threeten.bp.temporal.TemporalAdjusters;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
@@ -37,6 +43,8 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
     ProgressBar fgProgressBar;
     TextView textNextReminder;
 
+    private ArrayList<DayOfWeek> dayList = new ArrayList<>();
+
     public GoalInfoDialogFragment(Habit habit, int habitPos, GoalInfoInterface goalInfoInterface) {
         this.habit = habit;
         this.habitPos = habitPos;
@@ -50,6 +58,14 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.goal_info_layout, null);
+
+        dayList.add(DayOfWeek.SUNDAY);
+        dayList.add(DayOfWeek.MONDAY);
+        dayList.add(DayOfWeek.TUESDAY);
+        dayList.add(DayOfWeek.WEDNESDAY);
+        dayList.add(DayOfWeek.THURSDAY);
+        dayList.add(DayOfWeek.FRIDAY);
+        dayList.add(DayOfWeek.SATURDAY);
 
         textGoalName = v.findViewById(R.id.info_habit_name);
         checkBox = v.findViewById(R.id.check_box);
@@ -101,7 +117,13 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
             fgProgressBar.setVisibility(View.GONE);
         }
 
-        String nextReminder = "The next reminder for this habit is ";
+        LocalDate nextAlarmDate = getNextAlarmDate();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+
+        String nextReminder = "The next reminder for this habit is "
+                + nextAlarmDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+                + " at " + habit.getReminderTime().format(formatter);
         textNextReminder.setText(nextReminder);
 
         builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
@@ -129,8 +151,37 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
         textProgress.setText(progress);
     }
 
+    public LocalDate getNextAlarmDate() {
+        LocalDate d = LocalDate.now();
+        LocalTime t = LocalTime.now();
+        if (habit.getFrequency() == 0) {
+            int i = dayList.indexOf(d.getDayOfWeek());
+            while (!habit.getDaysOfWeek().get(i)) {
+                i++;
+                if (i >= 7) {
+                    i = 0;
+                }
+            }
+            if (d.getDayOfWeek() == dayList.get(i) && t.compareTo(habit.getReminderTime()) < 0)
+                return LocalDate.now();
+            else
+                return d.with(TemporalAdjusters.next(dayList.get(i)));
+        } else {
+            return LocalDate.now();
+        }
+    }
+
     public interface GoalInfoInterface {
         void updateData();
         void onEditClick(int position);
+    }
+
+    public int toHours(long milliseconds) {
+        return (int) (milliseconds / 3600000);
+    }
+
+    public int toMin(long milliseconds) {
+        long remainder = milliseconds % 3600000;
+        return (int) remainder / 60000;
     }
 }
