@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,9 +41,11 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
         TextView textHabitName = holder.habitName;
         TextView textProgress = holder.habitProgress;
+        ImageView imageHabitDone = holder.habitDone;
 
         textHabitName.setText(habit.getName());
 
+        imageHabitDone.setVisibility(View.GONE);
         if (habit.hasGoal()) {
             textProgress.setVisibility(View.VISIBLE);
             float percent = (float) habit.getNumberOfSuccesses() / (float) habit.getGoal();
@@ -63,12 +66,14 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
         private TextView habitName;
         private TextView habitProgress;
+        private ImageView habitDone;
         private HabitClickListener habitClickListener;
 
         public HabitViewHolder(@NonNull View v, HabitClickListener habitClickListener) {
             super(v);
-            this.habitName = v.findViewById(R.id.textHabitName);
-            this.habitProgress = v.findViewById(R.id.textGoalProgress);
+            this.habitName = v.findViewById(R.id.text_habit_name);
+            this.habitProgress = v.findViewById(R.id.text_goal_progress);
+            this.habitDone = v.findViewById(R.id.image_habit_done);
 
             this.habitClickListener = habitClickListener;
 

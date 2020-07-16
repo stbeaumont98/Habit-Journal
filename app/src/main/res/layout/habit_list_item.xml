@@ -21,22 +21,27 @@
 
 
         <TextView
-            android:id="@+id/textHabitName"
+            android:id="@+id/text_habit_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_margin="16dp"
-            android:text="TextView"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textGoalProgress"
+            android:id="@+id/text_goal_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:layout_margin="16dp"
-            android:text="0/0"
             android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/image_habit_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_margin="16dp" />
 
     </com.google.android.material.card.MaterialCardView>
 

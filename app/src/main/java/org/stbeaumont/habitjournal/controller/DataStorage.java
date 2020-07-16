@@ -8,6 +8,9 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import org.stbeaumont.habitjournal.model.Habit;
@@ -18,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,16 +33,8 @@ public class DataStorage {
     public DataStorage(Context context) {
         this.context = context;
 
-        GsonBuilder builder = new GsonBuilder();
-
-        // Register an adapter to manage the date types as long values
-        builder.registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-            public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("\"yyyy-MM-dd\"");
-                String jsonString = json.toString();
-                return LocalDate.parse(jsonString, formatter);
-            }
-        });
+        GsonBuilder builder = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
 
         gson = builder.create();
 
@@ -50,8 +44,6 @@ public class DataStorage {
      * string and saves the data to internal storage */
     public void updateData(ArrayList <Habit> habits) {
         String goalJson = gson.toJson(habits);
-
-        System.out.println(goalJson);
 
         try {
             FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
@@ -81,5 +73,20 @@ public class DataStorage {
         }
 
         return habits;
+    }
+
+    class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+
+        @Override
+        public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)); // "yyyy-mm-dd"
+        }
+
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("\"yyyy-MM-dd\"");
+            String jsonString = json.toString();
+            return LocalDate.parse(jsonString, formatter);
+        }
     }
 }
