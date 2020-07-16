@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Habit Name"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Have you completed this habit for today?"
+        android:text="@string/habit_completion_prompt"
         app:layout_constraintEnd_toStartOf="@+id/check_box"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -49,7 +48,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/check_box">
 
-        <!-- ProgressBar that represents a total of 100% -->
         <ProgressBar
             android:id="@+id/bg_progressbar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -65,7 +63,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ProgressBar that represents a chart slice, where "android:progress" is the % value of the slice -->
         <ProgressBar
             android:id="@+id/fg_progressbar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -81,12 +78,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- The text that goes in a center of the chart -->
         <TextView
             android:id="@+id/info_goal_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0/0"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -98,13 +93,14 @@
 
     <TextView
         android:id="@+id/info_next_reminder"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="The next reminder for this habit is "
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/info_progressbar_constraint" />
 

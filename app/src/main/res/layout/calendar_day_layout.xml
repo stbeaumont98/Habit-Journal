@@ -5,7 +5,7 @@
 
     <TextView
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/calendarDayText"
+        android:id="@+id/text_calendar_day"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -14,7 +14,7 @@
         android:layout_margin="6dp" />
 
     <View
-        android:id="@+id/eventDotView"
+        android:id="@+id/dot_event"
         android:layout_width="4.5dp"
         android:layout_height="4.5dp"
         android:layout_marginBottom="8dp"
