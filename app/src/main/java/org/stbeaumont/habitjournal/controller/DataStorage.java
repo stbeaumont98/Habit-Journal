@@ -67,7 +67,6 @@ public class DataStorage {
             fis.close();
 
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
-            System.out.println(content);
             habits = gson.fromJson(content, listType);
         } catch (IOException e) {
             e.printStackTrace();

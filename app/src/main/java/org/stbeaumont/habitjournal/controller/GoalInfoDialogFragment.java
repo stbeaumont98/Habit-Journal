@@ -21,13 +21,9 @@ import org.stbeaumont.habitjournal.model.Habit;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
-import org.threeten.bp.chrono.ChronoLocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.FormatStyle;
-import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
-import org.threeten.bp.temporal.TemporalField;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
