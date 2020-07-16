@@ -31,4 +31,5 @@
     <string name="times">time(s)</string>
     <string name="default_time">12:00 PM</string>
     <string name="habit_completion_prompt">Have you completed this habit for today?</string>
+    <string name="starting">Starting:</string>
 </resources>

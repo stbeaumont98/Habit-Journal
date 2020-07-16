@@ -28,6 +28,7 @@ public class Habit implements Parcelable {
     private int frequency; //daily, weekly, or monthly
     private ArrayList<Boolean> daysOfWeek = new ArrayList<>();
     private int weeklyInterval;
+    private LocalDate weeklyStartDate;
     private int dayOfMonth;
     private boolean hasGoal;
     private int goal;
@@ -41,17 +42,19 @@ public class Habit implements Parcelable {
             daysOfWeek.add(true);
         }
         weeklyInterval = 0;
+        weeklyStartDate = LocalDate.now();
         dayOfMonth = 0;
         hasGoal = false;
         goal = 0;
         reminderTime = LocalTime.of(12, 0);
     }
 
-    public Habit(String name, int frequency, ArrayList<Boolean> daysOfWeek, int weeklyInterval, int dayOfMonth, boolean hasGoal, int goal, LocalTime reminderTime) {
+    public Habit(String name, int frequency, ArrayList<Boolean> daysOfWeek, int weeklyInterval, LocalDate weeklyStartDate, int dayOfMonth, boolean hasGoal, int goal, LocalTime reminderTime) {
         this.name = name;
         this.frequency = frequency;
         this.daysOfWeek = daysOfWeek;
         this.weeklyInterval = weeklyInterval;
+        this.weeklyStartDate = weeklyStartDate;
         this.dayOfMonth = dayOfMonth;
         this.hasGoal = hasGoal;
         this.goal = goal;
@@ -63,6 +66,7 @@ public class Habit implements Parcelable {
         frequency = in.readInt();
         in.readList(daysOfWeek, null);
         weeklyInterval = in.readInt();
+        weeklyStartDate = (LocalDate) in.readSerializable();
         dayOfMonth = in.readInt();
         hasGoal = in.readByte() != 0;
         goal = in.readInt();
@@ -96,6 +100,10 @@ public class Habit implements Parcelable {
 
     public int getWeeklyInterval() {
         return weeklyInterval;
+    }
+
+    public LocalDate getWeeklyStartDate() {
+        return weeklyStartDate;
     }
 
     public int getDayOfMonth() {
@@ -146,6 +154,7 @@ public class Habit implements Parcelable {
         dest.writeInt(this.frequency);
         dest.writeList(this.daysOfWeek);
         dest.writeInt(this.weeklyInterval);
+        dest.writeSerializable(this.weeklyStartDate);
         dest.writeInt(this.dayOfMonth);
         dest.writeByte((byte) (this.hasGoal ? 1 : 0));
         dest.writeInt(this.goal);
@@ -167,6 +176,10 @@ public class Habit implements Parcelable {
 
     public void setWeeklyInterval(int weeklyInterval) {
         this.weeklyInterval = weeklyInterval;
+    }
+
+    public void setWeeklyStartDate(LocalDate weeklyStartDate) {
+        this.weeklyStartDate = weeklyStartDate;
     }
 
     public void setDayOfMonth(int dayOfMonth) {

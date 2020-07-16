@@ -21,9 +21,12 @@ import org.stbeaumont.habitjournal.model.Habit;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
+import org.threeten.bp.chrono.ChronoLocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.FormatStyle;
+import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
+import org.threeten.bp.temporal.TemporalField;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -154,7 +157,7 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
     public LocalDate getNextAlarmDate() {
         LocalDate d = LocalDate.now();
         LocalTime t = LocalTime.now();
-        if (habit.getFrequency() == 0) {
+        if (habit.getFrequency() == 0) { //daily
             int i = dayList.indexOf(d.getDayOfWeek());
             while (!habit.getDaysOfWeek().get(i)) {
                 i++;
@@ -162,26 +165,52 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
                     i = 0;
                 }
             }
-            if (d.getDayOfWeek() == dayList.get(i) && t.compareTo(habit.getReminderTime()) < 0)
-                return LocalDate.now();
-            else
-                return d.with(TemporalAdjusters.next(dayList.get(i)));
-        } else {
-            return LocalDate.now();
+            return d.with(TemporalAdjusters.nextOrSame(dayList.get(i)));
+        } else if (habit.getFrequency() == 1) { //weekly
+            if (d.compareTo(habit.getWeeklyStartDate()) < 0) {
+                // if we haven't hit the start date yet
+                return habit.getWeeklyStartDate();
+            } else {
+                LocalDate weekly = habit.getWeeklyStartDate();
+                while (d.compareTo(weekly) > 0) {
+                    // if current date is after the weekly date, add to the weeks by the interval and check again
+                    weekly = weekly.plusWeeks(habit.getWeeklyInterval());
+                }
+                return weekly;
+            }
+        } else { //monthly
+            if (habit.getDayOfMonth() == 1) {
+                if ((d.compareTo(d.with(TemporalAdjusters.firstDayOfMonth())) == 0 && t.compareTo(habit.getReminderTime()) > 0) || d.compareTo(d.with(TemporalAdjusters.firstDayOfMonth())) > 0) {
+                    // if it is today and the reminder time has passed
+                    return d.with(TemporalAdjusters.firstDayOfNextMonth());
+                } else {
+                    // otherwise get the first day of the current month
+                    return d.with(TemporalAdjusters.firstDayOfMonth());
+                }
+            } else if (habit.getDayOfMonth() == 31) {
+                if (d.compareTo(d.with(TemporalAdjusters.lastDayOfMonth())) <= 0 && t.compareTo(habit.getReminderTime()) < 0) {
+                    // if it is today or before and hasn't passed the reminder time
+                    return d.with(TemporalAdjusters.lastDayOfMonth());
+                } else {
+                    // return the last day of next month
+                    LocalDate dateNextMonth = d.with(TemporalAdjusters.firstDayOfNextMonth());
+                    return dateNextMonth.with(TemporalAdjusters.lastDayOfMonth());
+                }
+            } else {
+                if (d.getDayOfMonth() < habit.getDayOfMonth()) {
+                    // if you haven't passed it yet
+                    return d.withDayOfMonth(habit.getDayOfMonth());
+                } else {
+                    // if you've already passed it for this month
+                    LocalDate dateNextMonth = d.with(TemporalAdjusters.firstDayOfNextMonth());
+                    return dateNextMonth.withDayOfMonth(habit.getDayOfMonth());
+                }
+            }
         }
     }
 
     public interface GoalInfoInterface {
         void updateData();
         void onEditClick(int position);
-    }
-
-    public int toHours(long milliseconds) {
-        return (int) (milliseconds / 3600000);
-    }
-
-    public int toMin(long milliseconds) {
-        long remainder = milliseconds % 3600000;
-        return (int) remainder / 60000;
     }
 }

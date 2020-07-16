@@ -13,6 +13,7 @@
         <item name="android:windowLightNavigationBar"
             tools:targetApi="27">true</item>
         <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:datePickerStyle">@style/Theme.MyTheme.DatePicker</item>
         <item name="android:timePickerStyle">@style/Theme.MyTheme.TimePicker</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Small</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Medium</item>
@@ -47,6 +48,14 @@
         <item name="android:numbersTextColor">@android:color/black</item>
         <item name="android:numbersInnerTextColor">@android:color/black</item>
         <item name="android:amPmTextColor">@android:color/black</item>
+    </style>
+
+    <style name="Theme.MyTheme.DatePicker" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:datePickerMode">calendar</item>
+        <item name="android:headerBackground">@android:color/white</item>
+        <item name="android:headerDayOfMonthTextAppearance">@style/DialogHeaderTextTheme</item>
+        <item name="android:headerMonthTextAppearance">@style/DialogHeaderTextTheme</item>
+        <item name="android:headerYearTextAppearance">@style/DialogHeaderTextTheme</item>
     </style>
 
     <style name="DialogHeaderTextTheme" parent="">

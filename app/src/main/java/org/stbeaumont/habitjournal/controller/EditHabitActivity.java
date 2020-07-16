@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -26,8 +28,10 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +47,7 @@ public class EditHabitActivity extends AppCompatActivity {
     int mode;
     int position;
 
+    private LocalDate weeklyStartingDate = LocalDate.now();
     private int intReminderHour = 12;
     private int intReminderMin = 0;
     private boolean boolReminderSet = false;
@@ -52,12 +57,14 @@ public class EditHabitActivity extends AppCompatActivity {
 
     private TextInputEditText editTextHabit;
     private TextView textViewReminderTime;
+    private TextView textViewPrevWeekDate;
     private Button buttonEveryday;
     private CheckBox checkBoxGoal;
     private NumberPicker pickerWeeks;
     private ConstraintLayout constraintGoal;
     private EditText editTextGoal;
     private NumberPicker pickerDayOfMonth;
+    private DatePicker datePicker;
     private TimePicker timePicker;
 
     private ArrayList<Button> frequencyButtonList = new ArrayList<>();
@@ -114,6 +121,7 @@ public class EditHabitActivity extends AppCompatActivity {
 
         editTextHabit = findViewById(R.id.edit_text_habit);
 
+        textViewPrevWeekDate = findViewById(R.id.text_start_date);
         textViewReminderTime = findViewById(R.id.text_reminder_time);
 
         ConstraintLayout constraintDaily = findViewById(R.id.constraint_daily);
@@ -220,6 +228,27 @@ public class EditHabitActivity extends AppCompatActivity {
             }
         });
 
+        textViewPrevWeekDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = EditHabitActivity.this.getLayoutInflater();
+                final View view = inflater.inflate(R.layout.datepicker_dialog_layout, null);
+                datePicker = view.findViewById(R.id.date_picker);
+
+                datePicker.updateDate(weeklyStartingDate.getYear(), weeklyStartingDate.getMonthValue() - 1, weeklyStartingDate.getDayOfMonth());
+
+                new MaterialAlertDialogBuilder(EditHabitActivity.this)
+                        .setView(view)
+                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setWeeklyStartingDate(LocalDate.of(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth()));
+                            }
+                        }).show();
+            }
+        });
+
         textViewReminderTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,6 +340,7 @@ public class EditHabitActivity extends AppCompatActivity {
         selectFrequency(habit.getFrequency());
         updateDayButtons();
         pickerWeeks.setValue(habit.getWeeklyInterval());
+        setWeeklyStartingDate(habit.getWeeklyStartDate());
         if (habit.getDayOfMonth() == 1) {
             selectDayOfMonth(0);
         } else if (habit.getDayOfMonth() == 31) {
@@ -331,6 +361,16 @@ public class EditHabitActivity extends AppCompatActivity {
 
         habit.setReminderTime(reminderTime);
         boolReminderSet = true;
+    }
+
+    public void setWeeklyStartingDate(LocalDate weeklyStartingDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.getDefault());
+        String text = weeklyStartingDate.format(formatter);
+        textViewPrevWeekDate.setText(text);
+
+        this.weeklyStartingDate = weeklyStartingDate;
+
+        habit.setWeeklyStartDate(weeklyStartingDate);
     }
 
     public void selectFrequency(int index) {
@@ -420,18 +460,5 @@ public class EditHabitActivity extends AppCompatActivity {
         } else {
             return false;
         }
-    }
-
-    public long toMilliseconds(int hour, int min) {
-        return ((long) hour * 3600000) + ((long) min * 60000);
-    }
-
-    public int toHours(long milliseconds) {
-        return (int) (milliseconds / 3600000);
-    }
-
-    public int toMin(long milliseconds) {
-        long remainder = milliseconds % 3600000;
-        return (int) remainder / 60000;
     }
 }
