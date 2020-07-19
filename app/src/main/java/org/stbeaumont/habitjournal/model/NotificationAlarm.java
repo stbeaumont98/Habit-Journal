@@ -4,127 +4,55 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.temporal.TemporalAdjusters;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Queue;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class NotificationAlarm {
 
-    Context context;
-    Habit habit;
-    String title;
-    String content;
-    int position;
-    String id;
+    private Context context;
+    private ArrayList<Habit> habits;
+    private String title;
+    private String content;
+    private int position;
+    int id;
 
-    public NotificationAlarm(Context context, Habit habit, int pos, String id) {
+    public NotificationAlarm(Context context, ArrayList<Habit> habits, int pos) {
         this.context = context;
-        this.habit = habit;
-        this.title = habit.getName();
+        this.habits = habits;
+        this.title = habits.get(pos).getName();
         this.content = "Don't forget to complete your habit for today!";
         this.position = pos;
-        this.id = id;
-    }
-
-    public void setUpAlarms() {
-
-        int hour = (int) TimeUnit.MILLISECONDS.toHours(habit.getReminderTime());
-        int min = (int) TimeUnit.MILLISECONDS.toMinutes(habit.getReminderTime()) - (int) TimeUnit.HOURS.toMinutes(hour);
-
-        switch (habit.getFrequency()) {
-            case 0:
-                scheduleDailyNotifications(habit.getDaysOfWeek(), hour, min);
-                break;
-            case 1:
-                scheduleWeeklyNotifications(habit.getWeeklyInterval(), hour, min);
-                break;
-            case 2:
-                scheduleMonthlyNotifications(habit.getDayOfMonth(), hour, min);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void scheduleDailyNotifications(ArrayList<Boolean> daysOfWeek, int hour, int min) {
-
-        int[] days = {Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY};
-
-        for (int i = 0; i < 7; i++) {
-            if (daysOfWeek.get(i)) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.DAY_OF_WEEK, days[i]);
-
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, min);
-
-                if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
-                    calendar.add(Calendar.DAY_OF_YEAR, 7);
-                }
-
-                Intent intent = new Intent(context, CustomReceiver.class);
-                intent.putExtra("title", title);
-                intent.putExtra("content", content);
-                intent.putExtra("pos", position);
-                intent.putExtra("id", id);
-
-                PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pIntent);
-            }
-        }
-    }
-
-    private void scheduleWeeklyNotifications(int weeklyInterval, int hour, int min) {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.add(Calendar.DAY_OF_YEAR, 7);
-
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, min);
-
-        Intent intent = new Intent(context, CustomReceiver.class);
-        intent.putExtra("title", title);
-        intent.putExtra("content", content);
-        intent.putExtra("pos", position);
-        intent.putExtra("id", id);
-
-        PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7 * weeklyInterval, pIntent);
-
-    }
-
-    private void scheduleMonthlyNotifications(int dayOfMonth, int hour, int min) {
-
-        Calendar calendar = Calendar.getInstance();
-
-        if (dayOfMonth == 31) {
-            int currentMonth = calendar.get(Calendar.MONTH);
-
-            currentMonth++;
-
-            if (currentMonth > Calendar.DECEMBER) {
-                currentMonth = Calendar.JANUARY;
-                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
-            }
-
-            // reset calendar to next month
-            calendar.set(Calendar.MONTH, currentMonth);
-            // get the maximum possible days in this month
-            int maximumDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-            // set the calendar to maximum day (e.g in case of fEB 28th, or leap 29th)
-            calendar.set(Calendar.DAY_OF_MONTH, maximumDay);
+        if (habits.get(pos).getNotificationID() == 0) {
+            this.id = getNewNotificationID();
+            habits.get(pos).setNotificationID(this.id);
         } else {
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            this.id = habits.get(pos).getNotificationID();
         }
+    }
 
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, min);
+    private void scheduleNextNotification() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+
+        LocalDate nextAlarm = getNextAlarmDate(habits.get(position));
+
+        calendar.set(nextAlarm.getYear(), nextAlarm.getMonthValue() - 1, nextAlarm.getDayOfMonth(), habits.get(position).getReminderTime().getHour(), habits.get(position).getReminderTime().getMinute(), 0);
 
         Intent intent = new Intent(context, CustomReceiver.class);
         intent.putExtra("title", title);
@@ -136,6 +64,80 @@ public class NotificationAlarm {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
+    }
 
+    public static LocalDate getNextAlarmDate(Habit habit) {
+        ArrayList<DayOfWeek> dayList = new ArrayList<>();
+
+        dayList.add(DayOfWeek.SUNDAY);
+        dayList.add(DayOfWeek.MONDAY);
+        dayList.add(DayOfWeek.TUESDAY);
+        dayList.add(DayOfWeek.WEDNESDAY);
+        dayList.add(DayOfWeek.THURSDAY);
+        dayList.add(DayOfWeek.FRIDAY);
+        dayList.add(DayOfWeek.SATURDAY);
+
+        LocalDate d = LocalDate.now();
+        LocalTime t = LocalTime.now();
+        if (habit.getFrequency() == 0) { //daily
+            int i = dayList.indexOf(d.getDayOfWeek());
+            while (!habit.getDaysOfWeek().get(i)) {
+                i++;
+                if (i >= 7) {
+                    i = 0;
+                }
+            }
+            return d.with(TemporalAdjusters.nextOrSame(dayList.get(i)));
+        } else if (habit.getFrequency() == 1) { //weekly
+            if (d.compareTo(habit.getWeeklyStartDate()) < 0) {
+                // if we haven't hit the start date yet
+                return habit.getWeeklyStartDate();
+            } else {
+                LocalDate weekly = habit.getWeeklyStartDate();
+                while (d.compareTo(weekly) > 0) {
+                    // if current date is after the weekly date, add to the weeks by the interval and check again
+                    weekly = weekly.plusWeeks(habit.getWeeklyInterval());
+                }
+                return weekly;
+            }
+        } else { //monthly
+            if (habit.getDayOfMonth() == 1) {
+                if ((d.compareTo(d.with(TemporalAdjusters.firstDayOfMonth())) == 0 && t.compareTo(habit.getReminderTime()) > 0) || d.compareTo(d.with(TemporalAdjusters.firstDayOfMonth())) > 0) {
+                    // if it is today and the reminder time has passed
+                    return d.with(TemporalAdjusters.firstDayOfNextMonth());
+                } else {
+                    // otherwise get the first day of the current month
+                    return d.with(TemporalAdjusters.firstDayOfMonth());
+                }
+            } else if (habit.getDayOfMonth() == 31) {
+                if (d.compareTo(d.with(TemporalAdjusters.lastDayOfMonth())) <= 0 && t.compareTo(habit.getReminderTime()) < 0) {
+                    // if it is today or before and hasn't passed the reminder time
+                    return d.with(TemporalAdjusters.lastDayOfMonth());
+                } else {
+                    // return the last day of next month
+                    LocalDate dateNextMonth = d.with(TemporalAdjusters.firstDayOfNextMonth());
+                    return dateNextMonth.with(TemporalAdjusters.lastDayOfMonth());
+                }
+            } else {
+                if (d.getDayOfMonth() < habit.getDayOfMonth()) {
+                    // if you haven't passed it yet
+                    return d.withDayOfMonth(habit.getDayOfMonth());
+                } else {
+                    // if you've already passed it for this month
+                    LocalDate dateNextMonth = d.with(TemporalAdjusters.firstDayOfNextMonth());
+                    return dateNextMonth.withDayOfMonth(habit.getDayOfMonth());
+                }
+            }
+        }
+    }
+
+    public int getNewNotificationID() {
+        int newID = new Random().nextInt(Integer.MAX_VALUE) + 1;
+        for (Habit h : habits) {
+            if (h.getNotificationID() == newID) {
+                newID = new Random().nextInt(Integer.MAX_VALUE) + 1;
+            }
+        }
+        return newID;
     }
 }

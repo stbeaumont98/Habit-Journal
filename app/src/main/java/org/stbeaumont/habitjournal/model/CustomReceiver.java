@@ -13,13 +13,15 @@ import org.stbeaumont.habitjournal.controller.HomeActivity;
 
 public class CustomReceiver extends BroadcastReceiver {
 
+    private String CHANNEL_ID = "habit-reminder";
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
         String title = intent.getStringExtra("title");
         String content = intent.getStringExtra("content");
         int position = intent.getIntExtra("pos", 0);
-        String CHANNEL_ID = intent.getStringExtra("id");
+        int notificationID = intent.getIntExtra("id", 0);
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
