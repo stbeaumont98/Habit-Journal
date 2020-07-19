@@ -34,6 +34,7 @@ public class Habit implements Parcelable {
     private int goal;
     private LocalTime reminderTime;
     private HashMap<LocalDate, Boolean> dateLog = new HashMap<>();
+    private int notificationID = 0;
 
     public Habit() {
         name = "";
@@ -72,6 +73,7 @@ public class Habit implements Parcelable {
         goal = in.readInt();
         reminderTime = (LocalTime) in.readSerializable();
         in.readMap(dateLog, null);
+        notificationID = in.readInt();
     }
 
     public static final Creator<Habit> CREATOR = new Creator<Habit>() {
@@ -139,6 +141,10 @@ public class Habit implements Parcelable {
         return dateLog.get(date);
     }
 
+    public int getNotificationID() {
+        return notificationID;
+    }
+
     public void logDate(LocalDate date, Boolean isCompleted) {
         dateLog.put(date, isCompleted);
     }
@@ -160,6 +166,7 @@ public class Habit implements Parcelable {
         dest.writeInt(this.goal);
         dest.writeSerializable(this.reminderTime);
         dest.writeMap(this.dateLog);
+        dest.writeInt(this.notificationID);
     }
 
     public void setName(String name) {
@@ -196,6 +203,10 @@ public class Habit implements Parcelable {
 
     public void setReminderTime(LocalTime reminderTime) {
         this.reminderTime = reminderTime;
+    }
+
+    public void setNotificationID(int notificationID) {
+        this.notificationID = notificationID;
     }
 
     public class NoLogForDateException extends Exception
