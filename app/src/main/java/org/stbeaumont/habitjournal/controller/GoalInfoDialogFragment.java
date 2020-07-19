@@ -108,7 +108,7 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
             fgProgressBar.setVisibility(View.GONE);
         }
 
-        LocalDate nextAlarmDate = NotificationAlarm.getNextAlarmDate(habit);
+        LocalDate nextAlarmDate = NotificationAlarm.getNextAlarmDate(habit, LocalDate.now(), LocalTime.now());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
 

@@ -8,6 +8,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer;
 import org.stbeaumont.habitjournal.model.Habit;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.HabitAdapter;
+import org.stbeaumont.habitjournal.model.NotificationService;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.YearMonth;
@@ -50,7 +54,6 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         AndroidThreeTen.init(this);
 
         dataStorage = new DataStorage(this);
-
         habits.addAll(dataStorage.loadData());
 
         Toolbar tb = findViewById(R.id.toolbar);
@@ -60,6 +63,21 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
 
         if (actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
+
+        /* This code is necessary for notifications on Android 8.0 and higher
+         * Based on the example found at https://stackoverflow.com/a/47974065 */
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String CHANNEL_ID = "habit-reminder";
+            CharSequence name = "habit_notification_channel";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel.setDescription("This is the notification channel for Habit Journal");
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            mChannel.setShowBadge(false);
+            notificationManager.createNotificationChannel(mChannel);
+        }
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab_new_habit);
 

@@ -13,8 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name="org.stbeaumont.habitjournal.model.CustomReceiver"
+            android:name="org.stbeaumont.habitjournal.model.NotificationReceiver"
             android:exported="false" />
+        <service android:name=".model.NotificationService"
+            android:exported="false"
+            android:label="Notification Service"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="org.stbeaumont.habitjournal.model.NotificationService" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".controller.EditHabitActivity"
             android:parentActivityName=".controller.HomeActivity">

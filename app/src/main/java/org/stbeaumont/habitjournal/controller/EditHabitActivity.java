@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
+import org.stbeaumont.habitjournal.model.NotificationAlarm;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -78,9 +79,7 @@ public class EditHabitActivity extends AppCompatActivity {
 
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-
         ActionBar actionBar = getSupportActionBar();
-
         if (actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
 
@@ -294,14 +293,21 @@ public class EditHabitActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DataStorage data = new DataStorage(getApplicationContext());
                 habit.setName(Objects.requireNonNull(editTextHabit.getText()).toString());
                 String goalValue = editTextGoal.getText().toString();
                 habit.setGoal(goalValue.isEmpty() ? 0 : Integer.parseInt(goalValue));
                 Intent i = new Intent();
                 if (mode == MODE_EDIT) {
                     habits.set(position, habit);
+                    data.updateData(habits);
+                    NotificationAlarm notificationAlarm = new NotificationAlarm(getApplicationContext(), position);
+                    notificationAlarm.scheduleNextNotification(LocalDate.now(), LocalTime.now());
                 } else {
                     habits.add(habit);
+                    data.updateData(habits);
+                    NotificationAlarm notificationAlarm = new NotificationAlarm(getApplicationContext(), habits.size() - 1);
+                    notificationAlarm.scheduleNextNotification(LocalDate.now(), LocalTime.now());
                 }
                 i.putExtra("habits", habits);
                 setResult(RESULT_OK, i);

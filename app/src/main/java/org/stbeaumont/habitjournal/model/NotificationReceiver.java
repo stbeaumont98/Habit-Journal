@@ -10,8 +10,10 @@ import androidx.core.app.NotificationCompat;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.controller.HomeActivity;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 
-public class CustomReceiver extends BroadcastReceiver {
+public class NotificationReceiver extends BroadcastReceiver {
 
     private String CHANNEL_ID = "habit-reminder";
 
@@ -25,24 +27,22 @@ public class CustomReceiver extends BroadcastReceiver {
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        Intent i = new Intent(context, HomeActivity.class);
+        i.putExtra("pos", position);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, 0);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(content)
+                .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
-        Intent i = new Intent(context, HomeActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-        i.putExtra("pos", position);
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(
-                        context,
-                        0,
-                        i,
-                        PendingIntent.FLAG_ONE_SHOT
-                );
+        NotificationAlarm notificationAlarm = new NotificationAlarm(context, position);
+        notificationAlarm.scheduleNextNotification(LocalDate.now(), LocalTime.now());
 
-        manager.notify(1, builder.build());
+        manager.notify(notificationID, builder.build());
+
     }
 }
