@@ -19,23 +19,15 @@ public class NotificationAlarm {
 
     private Context context;
     private ArrayList<Habit> habits;
-    private String title;
-    private String content;
     private int position;
-    int id;
 
     public NotificationAlarm(Context context, int pos) {
         this.context = context;
         DataStorage data = new DataStorage(context);
         this.habits = data.loadData();
-        this.title = habits.get(pos).getName();
-        this.content = "Don't forget to complete your habit for today!";
         this.position = pos;
         if (habits.get(pos).getNotificationID() == 0) {
-            this.id = getNewNotificationID();
-            habits.get(pos).setNotificationID(this.id);
-        } else {
-            this.id = habits.get(pos).getNotificationID();
+            habits.get(pos).setNotificationID(getNewNotificationID());
         }
     }
 
@@ -49,12 +41,9 @@ public class NotificationAlarm {
 
         Intent intent = new Intent(context, NotificationReceiver.class);
 
-        intent.putExtra("title", title);
-        intent.putExtra("content", content);
         intent.putExtra("pos", position);
-        intent.putExtra("id", id);
 
-        PendingIntent pIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        PendingIntent pIntent = PendingIntent.getBroadcast(context, habits.get(position).getNotificationID(), intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pIntent);

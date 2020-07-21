@@ -104,6 +104,18 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        stopService(new Intent(this, NotificationService.class));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, NotificationService.class));
+    }
+
     public void setupCalendar(CalendarView calendarView) {
         final LocalDate today = LocalDate.now();
 

@@ -48,8 +48,6 @@ public class EditHabitActivity extends AppCompatActivity {
     int position;
 
     private LocalDate weeklyStartingDate = LocalDate.now();
-    private int intReminderHour = 12;
-    private int intReminderMin = 0;
     private boolean boolReminderSet = false;
 
     Habit habit;
@@ -271,8 +269,8 @@ public class EditHabitActivity extends AppCompatActivity {
                         hour = 0;
                     }
                 } else {
-                    hour = intReminderHour;
-                    min = intReminderMin;
+                    hour = habit.getReminderTime().getHour();
+                    min = habit.getReminderTime().getMinute();
                 }
 
                 timePicker.setHour(hour);
