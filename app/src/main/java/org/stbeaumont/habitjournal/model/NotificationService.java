@@ -52,9 +52,13 @@ public class NotificationService extends Service {
         DataStorage data = new DataStorage(getApplicationContext());
         ArrayList<Habit> habits = data.loadData();
         position = intent.getIntExtra("pos", 0);
-        title = habits.get(position).getName();
-        notificationID = habits.get(position).getNotificationID();
-        startTimer();
+        if (habits.isEmpty()) {
+            stopTimerTask();
+        } else {
+            title = habits.get(position).getName();
+            notificationID = habits.get(position).getNotificationID();
+            startTimer();
+        }
         return START_STICKY;
     }
 
