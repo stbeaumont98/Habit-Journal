@@ -3,9 +3,8 @@ package org.stbeaumont.habitjournal.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

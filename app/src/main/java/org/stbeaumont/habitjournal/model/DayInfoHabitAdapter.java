@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.stbeaumont.habitjournal.R;
-import org.threeten.bp.LocalDate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DayInfoHabitAdapter extends RecyclerView.Adapter<DayInfoHabitAdapter.HabitViewHolder> {

@@ -17,10 +17,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.DayInfoHabitAdapter;
 import org.stbeaumont.habitjournal.model.Habit;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.FormatStyle;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 
 public class DayInfoDialogFragment extends AppCompatDialogFragment {

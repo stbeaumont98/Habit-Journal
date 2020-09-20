@@ -1,7 +1,6 @@
 package org.stbeaumont.habitjournal.controller;
 
 import android.app.Dialog;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,13 +19,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
 import org.stbeaumont.habitjournal.model.NotificationAlarm;
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.FormatStyle;
-import org.threeten.bp.temporal.TemporalAdjusters;
-import java.util.ArrayList;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 
 public class GoalInfoDialogFragment  extends AppCompatDialogFragment {

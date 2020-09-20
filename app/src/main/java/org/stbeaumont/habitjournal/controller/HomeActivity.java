@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.kizitonwose.calendarview.CalendarView;
 import com.kizitonwose.calendarview.model.CalendarDay;
 import com.kizitonwose.calendarview.model.CalendarMonth;
@@ -30,11 +29,11 @@ import org.stbeaumont.habitjournal.model.Habit;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.HabitAdapter;
 import org.stbeaumont.habitjournal.model.NotificationService;
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.YearMonth;
-import org.threeten.bp.temporal.WeekFields;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -51,7 +50,6 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        AndroidThreeTen.init(this);
 
         dataStorage = new DataStorage(this);
         habits.addAll(dataStorage.loadData());

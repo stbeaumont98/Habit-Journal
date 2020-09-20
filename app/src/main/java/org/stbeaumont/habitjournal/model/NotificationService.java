@@ -14,9 +14,9 @@ import androidx.core.app.NotificationCompat;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.controller.DataStorage;
 import org.stbeaumont.habitjournal.controller.HomeActivity;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
