@@ -18,7 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
-import org.stbeaumont.habitjournal.model.NotificationAlarm;
+import org.stbeaumont.habitjournal.notifications.NotificationAlarm;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -74,6 +74,7 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
                 habit.logDate(LocalDate.now(), isChecked);
                 fgProgressBar.setProgress(habit.getNumberOfSuccesses());
                 updateProgress();
+                updateNextReminder();
             }
         });
 
@@ -91,6 +92,7 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
             fgProgressBar.setProgress(habit.getNumberOfSuccesses());
 
             updateProgress();
+            updateNextReminder();
 
             textProgress.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,15 +106,6 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
             bgProgressBar.setVisibility(View.GONE);
             fgProgressBar.setVisibility(View.GONE);
         }
-
-        LocalDate nextAlarmDate = NotificationAlarm.getNextAlarmDate(habit, LocalDate.now(), LocalTime.now());
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
-
-        String nextReminder = "The next reminder for this habit is "
-                + nextAlarmDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
-                + " at " + habit.getReminderTime().format(formatter);
-        textNextReminder.setText(nextReminder);
 
         builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             @Override
@@ -137,6 +130,22 @@ public class GoalInfoDialogFragment  extends AppCompatDialogFragment {
         percent *= 100;
         String progress = (isPercent ? String.format(Locale.getDefault(), "%.2f", percent) + "%" : habit.getNumberOfSuccesses() + "/" + habit.getGoal());
         textProgress.setText(progress);
+    }
+
+    public void updateNextReminder() {
+        LocalDate nextAlarmDate = null;
+        try {
+            nextAlarmDate = NotificationAlarm.getNextAlarmDate(habit, LocalDate.now(), LocalTime.now());
+        } catch (Habit.NoLogForDateException e) {
+            e.printStackTrace();
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+
+        String nextReminder = "The next reminder for this habit is "
+                + nextAlarmDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+                + " at " + habit.getReminderTime().format(formatter);
+        textNextReminder.setText(nextReminder);
     }
 
     public interface GoalInfoInterface {

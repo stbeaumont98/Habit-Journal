@@ -27,7 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.Habit;
-import org.stbeaumont.habitjournal.model.NotificationAlarm;
+import org.stbeaumont.habitjournal.notifications.NotificationAlarm;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -300,12 +300,20 @@ public class EditHabitActivity extends AppCompatActivity {
                     habits.set(position, habit);
                     data.updateData(habits);
                     NotificationAlarm notificationAlarm = new NotificationAlarm(getApplicationContext(), position);
-                    notificationAlarm.scheduleNextNotification(LocalDate.now(), LocalTime.now());
+                    try {
+                        notificationAlarm.scheduleNextNotification(LocalDate.now(), LocalTime.now());
+                    } catch (Habit.NoLogForDateException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     habits.add(habit);
                     data.updateData(habits);
                     NotificationAlarm notificationAlarm = new NotificationAlarm(getApplicationContext(), habits.size() - 1);
-                    notificationAlarm.scheduleNextNotification(LocalDate.now(), LocalTime.now());
+                    try {
+                        notificationAlarm.scheduleNextNotification(LocalDate.now(), LocalTime.now());
+                    } catch (Habit.NoLogForDateException e) {
+                        e.printStackTrace();
+                    }
                 }
                 i.putExtra("habits", habits);
                 setResult(RESULT_OK, i);

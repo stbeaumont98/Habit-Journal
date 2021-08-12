@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -34,7 +35,8 @@ public class DataStorage {
         this.context = context;
 
         GsonBuilder builder = new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter());
 
         gson = builder.create();
 
@@ -79,7 +81,7 @@ public class DataStorage {
 
         @Override
         public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)); // "yyyy-mm-dd"
+            return new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)); // "yyyy-MM-dd"
         }
 
         @Override
@@ -87,6 +89,21 @@ public class DataStorage {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("\"yyyy-MM-dd\"");
             String jsonString = json.toString();
             return LocalDate.parse(jsonString, formatter);
+        }
+    }
+
+    class LocalTimeAdapter implements JsonSerializer<LocalTime>, JsonDeserializer<LocalTime> {
+
+        @Override
+        public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_TIME)); // "HH:mm:ss"
+        }
+
+        @Override
+        public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("\"HH:mm:ss\"");
+            String jsonString = json.toString();
+            return LocalTime.parse(jsonString, formatter);
         }
     }
 }

@@ -82,7 +82,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
         @Override
         public void onClick(View v) {
-            habitClickListener.onHabitClick(getAdapterPosition());
+            habitClickListener.onHabitClick(getAbsoluteAdapterPosition());
         }
     }
 

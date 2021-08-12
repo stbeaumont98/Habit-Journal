@@ -47,6 +47,7 @@ public class Habit implements Parcelable {
         hasGoal = false;
         goal = 0;
         reminderTime = LocalTime.of(12, 0);
+        this.dateLog.put(LocalDate.now(), false);
     }
 
     public Habit(String name, int frequency, ArrayList<Boolean> daysOfWeek, int weeklyInterval, LocalDate weeklyStartDate, int dayOfMonth, boolean hasGoal, int goal, LocalTime reminderTime) {
@@ -59,6 +60,7 @@ public class Habit implements Parcelable {
         this.hasGoal = hasGoal;
         this.goal = goal;
         this.reminderTime = reminderTime;
+        this.dateLog.put(LocalDate.now(), false);
     }
 
     protected Habit(Parcel in) {
@@ -135,7 +137,7 @@ public class Habit implements Parcelable {
 
     public Boolean checkLogOnDate(LocalDate date) throws NoLogForDateException {
         if (!dateLog.containsKey(date)) {
-            throw new NoLogForDateException(this.name + "There is no log for this date.");
+            throw new NoLogForDateException(this.name + ": There is no log for this date.");
         }
         return dateLog.get(date);
     }

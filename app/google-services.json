@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "558159698945",
+    "firebase_url": "https://habitjournal-a8076.firebaseio.com",
+    "project_id": "habitjournal-a8076",
+    "storage_bucket": "habitjournal-a8076.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558159698945:android:680d3e15ea3f8aef59f400",
+        "android_client_info": {
+          "package_name": "org.stbeaumont.habitjournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558159698945-m5dtkfqn6hfslhkj3osdf5ad7ai6ag0v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.stbeaumont.habitjournal",
+            "certificate_hash": "b0b7e9799deb451a5e7779ba743aa9beea266d45"
+          }
+        },
+        {
+          "client_id": "558159698945-3govr3mmehsjn78c454jth0t7aj9eled.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVju-Ibgz_UtnKElXgKflki2GxKDMJE3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558159698945-3govr3mmehsjn78c454jth0t7aj9eled.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

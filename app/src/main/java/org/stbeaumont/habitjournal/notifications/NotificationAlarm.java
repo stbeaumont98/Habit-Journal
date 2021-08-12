@@ -1,11 +1,14 @@
-package org.stbeaumont.habitjournal.model;
+package org.stbeaumont.habitjournal.notifications;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.audiofx.PresetReverb;
 
 import org.stbeaumont.habitjournal.controller.DataStorage;
+import org.stbeaumont.habitjournal.controller.HomeActivity;
+import org.stbeaumont.habitjournal.model.Habit;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -31,7 +34,7 @@ public class NotificationAlarm {
         }
     }
 
-    public void scheduleNextNotification(LocalDate startDate, LocalTime startTime) {
+    public void scheduleNextNotification(LocalDate startDate, LocalTime startTime) throws Habit.NoLogForDateException {
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
 
@@ -39,7 +42,7 @@ public class NotificationAlarm {
 
         calendar.set(nextAlarm.getYear(), nextAlarm.getMonthValue() - 1, nextAlarm.getDayOfMonth(), habits.get(position).getReminderTime().getHour(), habits.get(position).getReminderTime().getMinute(), 0);
 
-        Intent intent = new Intent(context, NotificationReceiver.class);
+        Intent intent = new Intent(context, HomeActivity.class);
 
         intent.putExtra("pos", position);
 
@@ -50,7 +53,7 @@ public class NotificationAlarm {
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
     }
 
-    public static LocalDate getNextAlarmDate(Habit habit, LocalDate startDate, LocalTime startTime) {
+    public static LocalDate getNextAlarmDate(Habit habit, LocalDate startDate, LocalTime startTime) throws Habit.NoLogForDateException {
         ArrayList<DayOfWeek> dayList = new ArrayList<>();
 
         dayList.add(DayOfWeek.SUNDAY);
@@ -61,7 +64,7 @@ public class NotificationAlarm {
         dayList.add(DayOfWeek.FRIDAY);
         dayList.add(DayOfWeek.SATURDAY);
 
-        if (habit.getFrequency() == 0) { //daily
+        if (habit.getFrequency() == Habit.DAILY) { //daily
             int i = dayList.indexOf(startDate.getDayOfWeek());
             while (!habit.getDaysOfWeek().get(i)) {
                 i++;
@@ -69,17 +72,26 @@ public class NotificationAlarm {
                     i = 0;
                 }
             }
-            if (startTime.compareTo(habit.getReminderTime()) < 0)
-                return startDate.with(TemporalAdjusters.nextOrSame(dayList.get(i)));
-            else
-                return startDate.with(TemporalAdjusters.next(dayList.get(i)));
-        } else if (habit.getFrequency() == 1) { //weekly
-            if (startDate.compareTo(habit.getWeeklyStartDate()) < 0) {
-                // if we haven't hit the start date yet
-                return habit.getWeeklyStartDate();
+            if (dayList.indexOf(startDate.getDayOfWeek()) == i && startTime.isBefore(habit.getReminderTime()) && !habit.checkLogOnDate(startDate)) {
+                return startDate;
             } else {
-                LocalDate weekly = habit.getWeeklyStartDate();
-                while (startDate.compareTo(weekly) > 0) {
+                i++;
+                while (!habit.getDaysOfWeek().get(i)) {
+                    i++;
+                    if (i >= 7) {
+                        i = 0;
+                    }
+                }
+                return startDate.with(TemporalAdjusters.next(dayList.get(i)));
+            }
+        } else if (habit.getFrequency() == Habit.WEEKLY) { //weekly
+            LocalDate weekly = habit.getWeeklyStartDate();
+            if (startDate.isEqual(weekly) && startTime.isBefore(habit.getReminderTime()) && !habit.checkLogOnDate(startDate)) {
+                return startDate;
+            } else if (startDate.isBefore(weekly)) {
+                return weekly;
+            } else {
+                while (startDate.isAfter(weekly)) {
                     // if current date is after the weekly date, add to the weeks by the interval and check again
                     weekly = weekly.plusWeeks(habit.getWeeklyInterval());
                 }

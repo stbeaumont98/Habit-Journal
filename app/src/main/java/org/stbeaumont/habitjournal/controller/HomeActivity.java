@@ -13,6 +13,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,7 +29,6 @@ import com.kizitonwose.calendarview.ui.ViewContainer;
 import org.stbeaumont.habitjournal.model.Habit;
 import org.stbeaumont.habitjournal.R;
 import org.stbeaumont.habitjournal.model.HabitAdapter;
-import org.stbeaumont.habitjournal.model.NotificationService;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -52,7 +52,13 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
         setContentView(R.layout.activity_home);
 
         dataStorage = new DataStorage(this);
-        habits.addAll(dataStorage.loadData());
+        try {
+            habits.addAll(dataStorage.loadData());
+        }
+        catch (Exception e)
+        {
+            Log.d(e.toString(), "No stored data!");
+        }
 
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
@@ -100,18 +106,6 @@ public class HomeActivity extends AppCompatActivity implements HabitAdapter.Habi
 
         habitRecyclerView.setLayoutManager(llm);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        stopService(new Intent(this, NotificationService.class));
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, NotificationService.class));
     }
 
     public void setupCalendar(CalendarView calendarView) {
